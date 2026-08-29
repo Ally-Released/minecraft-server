@@ -8,6 +8,8 @@ import { SERVER_CONFIG } from "@/lib/config";
 import type { ServerStatus } from "@/lib/status";
 import { useLiveStatus } from "@/lib/useLiveStatus";
 import CopyIp from "@/components/ui/CopyIp";
+import { useCart } from "@/components/store/cart";
+import Icon from "@/components/ui/Icon";
 
 const LINKS = [
   { href: "/", label: "Home" },
@@ -25,6 +27,7 @@ function isActive(pathname: string, href: string) {
 export default function Nav({ status: initial }: { status: ServerStatus }) {
   const pathname = usePathname();
   const status = useLiveStatus(initial);
+  const cart = useCart();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -99,7 +102,7 @@ export default function Nav({ status: initial }: { status: ServerStatus }) {
                     href={l.href}
                     aria-current={on ? "page" : undefined}
                     className={`relative block px-4 py-2 text-sm font-medium tracking-wide transition-colors duration-200 ${
-                      on ? "text-primary" : l.emphasis ? "text-ice font-semibold" : "text-muted-foreground hover:text-foreground"
+                      on ? "text-primary" : l.emphasis ? "text-primary font-semibold" : "text-muted-foreground hover:text-foreground"
                     }`}
                   >
                     {on && (
@@ -123,6 +126,20 @@ export default function Nav({ status: initial }: { status: ServerStatus }) {
                 {online ? "Online" : "Offline"}
               </span>
             </div>
+
+            <button
+              type="button"
+              onClick={() => cart.setOpen(true)}
+              className="relative flex items-center justify-center h-10 w-10 text-muted-foreground transition-colors hover:text-foreground"
+              aria-label={`Cart with ${cart.count} items`}
+            >
+              <Icon name="cart" size={20} />
+              {cart.count > 0 && (
+                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[0.6rem] font-bold text-primary-foreground">
+                  {cart.count}
+                </span>
+              )}
+            </button>
 
             <span className="hidden md:block">
               <Link 
