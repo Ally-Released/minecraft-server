@@ -18,7 +18,7 @@ export const SERVER_CONFIG = {
   accounts: "Premium and cracked",
 
   /* ── Community ────────────────────────────────────────── */
-  discord: "https://discord.gg/clashernetwork",
+  discord: "https://discord.gg/TH7vZasVyw",
 
   /* ── Copy ─────────────────────────────────────────────── */
   description: "Build your story. Explore a world shaped by its players.",

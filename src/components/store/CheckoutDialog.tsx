@@ -7,6 +7,7 @@ import { useCart } from "./cart";
 import { writeClipboard } from "@/lib/clipboard";
 import Icon from "@/components/ui/Icon";
 import { Button } from "@/components/ui/button";
+import { SERVER_CONFIG } from "@/lib/config";
 
 export default function CheckoutDialog({
   open,
@@ -81,7 +82,7 @@ export default function CheckoutDialog({
               <p className="text-sm leading-relaxed text-muted-foreground">
                 After payment, go to the server{" "}
                 <a 
-                  href="https://discord.gg/TH7vZasVyw" 
+                  href={SERVER_CONFIG.discord} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="font-semibold text-primary transition-colors hover:text-primary/80"
@@ -90,7 +91,7 @@ export default function CheckoutDialog({
                 </a>
                 {" "}AND open a{" "}
                 <a 
-                  href="https://discord.com/channels/1081551257526882365/1506244594780737618/1506249289251422301"
+                  href={SERVER_CONFIG.discord}
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="font-semibold text-primary transition-colors hover:text-primary/80"
