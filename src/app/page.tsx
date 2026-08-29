@@ -1,19 +1,23 @@
 import React from "react";
 import Navbar from "@/components/Navbar";
+import AtmosphericBackground from "@/components/AtmosphericBackground";
 import Hero from "@/components/Hero";
 import Features from "@/components/Features";
-import VisualShowcase from "@/components/VisualShowcase";
-import JoinInstructions from "@/components/JoinInstructions";
+import HowToPlay from "@/components/HowToPlay";
+import Rules from "@/components/Rules";
+import Discord from "@/components/Discord";
 import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-bg-dark text-foreground">
+    <main className="relative min-h-screen">
+      <AtmosphericBackground />
       <Navbar />
       <Hero />
       <Features />
-      <VisualShowcase />
-      <JoinInstructions />
+      <HowToPlay />
+      <Rules />
+      <Discord />
       <Footer />
     </main>
   );

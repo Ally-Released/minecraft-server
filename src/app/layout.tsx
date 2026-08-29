@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Geist } from "next/font/google";
-import { cn } from "@/lib/utils";
+import { Inter, Outfit } from "next/font/google";
+import { SERVER_CONFIG } from "@/lib/config";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const outfit = Outfit({ subsets: ["latin"], variable: "--font-heading", weight: ["400","500","600","700","800"] });
 
 export const metadata: Metadata = {
-  title: "Clasher Network | Oceanic Minecraft Survival Server",
-  description: "A focused Minecraft SMP for Java and Bedrock. Copy the address, join Discord, and enter the world.",
+  title: `${SERVER_CONFIG.name} — Minecraft Survival Server`,
+  description: SERVER_CONFIG.description,
+  keywords: ["minecraft", "server", "survival", "smp", "java", "bedrock", SERVER_CONFIG.name.toLowerCase()],
 };
 
 export default function RootLayout({
@@ -16,14 +18,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn("font-sans", geist.variable)}>
+    <html lang="en" className={`${inter.variable} ${outfit.variable}`}>
       <head>
         <link rel="icon" type="image/png" sizes="64x64" href="/assets/favicon-64.png" />
         <link rel="apple-touch-icon" href="/assets/icon-192.png" />
-        <link rel="manifest" href="/site.webmanifest" />
-        <meta name="theme-color" content="#07111f" />
+        <meta name="theme-color" content="#0a0a0a" />
       </head>
-      <body>
+      <body className="font-sans antialiased">
         {children}
       </body>
     </html>

@@ -1,65 +1,64 @@
-import React from "react";
-import { Gamepad2, Users, ShieldCheck } from "lucide-react";
+"use client";
+
+import React, { useEffect, useRef } from "react";
+import { Sword, Globe, Hammer, Calendar, Shield, Users } from "lucide-react";
+import { SERVER_CONFIG } from "@/lib/config";
+
+const ICON_MAP: Record<string, React.ElementType> = {
+  Sword, Globe, Hammer, Calendar, Shield, Users,
+};
 
 export default function Features() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("animate-fade-in-up");
+            entry.target.classList.remove("opacity-0");
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
+    );
+
+    const cards = containerRef.current?.querySelectorAll("[data-feature]");
+    cards?.forEach((card) => observer.observe(card));
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className="py-24 px-8 max-w-7xl mx-auto" id="rules">
-      <div className="max-w-3xl mb-16">
-        <h2 className="font-vampire text-5xl md:text-7xl text-white mb-6">
-          One world. One<br />clear focus.
-        </h2>
-        <p className="text-gray-400 text-lg leading-relaxed">
-          Clasher Network keeps the public experience centered on survival, community, and the moments players make together.
+    <section className="relative z-10 py-20 px-6">
+      <div className="max-w-6xl mx-auto">
+        {/* Section label */}
+        <p className="text-center text-[11px] font-bold tracking-[0.3em] text-text-muted uppercase mb-4">
+          What Awaits You
         </p>
-      </div>
+        <h2 className="text-center font-[family-name:var(--font-heading)] text-3xl md:text-4xl font-bold text-text-primary mb-16">
+          Everything you need. Nothing you don&apos;t.
+        </h2>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Large Feature Card */}
-        <div className="lg:col-span-2 bg-bg-card border border-border-card rounded-2xl p-10 flex flex-col justify-between min-h-[360px] relative overflow-hidden group">
-          <div className="absolute inset-0 bg-gradient-to-br from-accent-blue/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-          
-          <div className="relative z-10 mb-8">
-            <span className="text-sm font-bold text-gray-500 mb-2 block">01</span>
-            <Gamepad2 className="text-accent-blue" size={32} />
-          </div>
-          
-          <div className="relative z-10">
-            <h3 className="text-2xl font-bold text-white mb-4">Build something lasting</h3>
-            <p className="text-gray-400 leading-relaxed max-w-lg">
-              Claim your space, gather resources, and turn a blank area into a base your team remembers.
-            </p>
-          </div>
-        </div>
-
-        {/* Right side stack */}
-        <div className="flex flex-col gap-6">
-          <div className="bg-bg-card border border-border-card rounded-2xl p-8 flex-1 flex flex-col justify-between group relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-accent-blue/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div className="relative z-10 mb-6 flex justify-between items-start">
-              <span className="text-sm font-bold text-gray-500">02</span>
-              <Users className="text-accent-blue" size={28} />
-            </div>
-            <div className="relative z-10">
-              <h3 className="text-xl font-bold text-white mb-3">Play with your people</h3>
-              <p className="text-gray-400 text-sm leading-relaxed">
-                Create a team, meet players on Discord, and plan your next session together.
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-bg-card border border-border-card rounded-2xl p-8 flex-1 flex flex-col justify-between group relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-accent-blue/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div className="relative z-10 mb-6 flex justify-between items-start">
-              <span className="text-sm font-bold text-gray-500">03</span>
-              <ShieldCheck className="text-accent-blue" size={28} />
-            </div>
-            <div className="relative z-10">
-              <h3 className="text-xl font-bold text-white mb-3">Get help quickly</h3>
-              <p className="text-gray-400 text-sm leading-relaxed">
-                Reach staff through the official Discord or support email when something needs attention.
-              </p>
-            </div>
-          </div>
+        {/* Feature grid */}
+        <div ref={containerRef} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          {SERVER_CONFIG.features.map((feature, i) => {
+            const Icon = ICON_MAP[feature.icon] || Sword;
+            return (
+              <div
+                key={feature.label}
+                data-feature
+                className="opacity-0 group flex flex-col items-center text-center p-6 rounded-2xl bg-surface-1/50 border border-surface-border hover:border-emerald-accent/30 hover:bg-surface-2/50 transition-all duration-300 cursor-default"
+                style={{ animationDelay: `${i * 80}ms` }}
+              >
+                <div className="w-12 h-12 rounded-xl bg-surface-2 flex items-center justify-center mb-4 group-hover:bg-emerald-accent/10 transition-colors duration-300">
+                  <Icon size={22} className="text-text-muted group-hover:text-emerald-accent transition-colors duration-300" />
+                </div>
+                <h3 className="text-sm font-bold text-text-primary mb-1">{feature.label}</h3>
+                <p className="text-xs text-text-muted leading-relaxed">{feature.description}</p>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

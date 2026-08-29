@@ -1,28 +1,73 @@
 import React from "react";
+import { SERVER_CONFIG } from "@/lib/config";
+
+const NAV_LINKS = [
+  { label: "Home", href: "#home" },
+  { label: "How to Play", href: "#how-to-play" },
+  { label: "Rules", href: "#rules" },
+  { label: "Discord", href: "#discord" },
+];
 
 export default function Footer() {
   return (
-    <footer className="border-t border-border-card bg-bg-dark pt-16 pb-8 px-8 mt-24">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center md:items-start gap-8">
-        <div>
-          <span className="font-vampire text-xl tracking-widest text-white uppercase block mb-2">CLASHER NETWORK</span>
-          <p className="text-gray-500 text-sm">Build more.</p>
-        </div>
-        
-        <div className="flex gap-12">
-          <div className="flex flex-col gap-3">
-            <a href="#home" className="text-sm font-semibold text-gray-400 hover:text-white transition-colors">Home</a>
-            <a href="#how-to-play" className="text-sm font-semibold text-gray-400 hover:text-white transition-colors">How to play</a>
+    <footer className="relative z-10 border-t border-surface-border bg-surface-0 pt-16 pb-8 px-6">
+      <div className="max-w-6xl mx-auto">
+        <div className="flex flex-col md:flex-row justify-between items-start gap-12 mb-16">
+          {/* Brand */}
+          <div>
+            <span className="font-[family-name:var(--font-display)] text-xl tracking-widest text-text-primary uppercase block mb-2">
+              {SERVER_CONFIG.name}
+            </span>
+            <p className="text-text-muted text-sm max-w-xs">
+              {SERVER_CONFIG.description}
+            </p>
           </div>
-          <div className="flex flex-col gap-3">
-            <a href="#rules" className="text-sm font-semibold text-gray-400 hover:text-white transition-colors">Rules</a>
-            <a href="#discord" className="text-sm font-semibold text-gray-400 hover:text-white transition-colors">Discord</a>
+
+          {/* Navigation */}
+          <div className="flex gap-16">
+            <div className="flex flex-col gap-3">
+              <span className="text-[10px] font-bold tracking-[0.2em] text-text-muted uppercase mb-1">
+                Navigation
+              </span>
+              {NAV_LINKS.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="text-sm text-text-secondary hover:text-text-primary transition-colors"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <span className="text-[10px] font-bold tracking-[0.2em] text-text-muted uppercase mb-1">
+                Connect
+              </span>
+              <a
+                href={SERVER_CONFIG.discord}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-text-secondary hover:text-text-primary transition-colors"
+              >
+                Discord
+              </a>
+              <span className="text-sm text-text-muted">
+                {SERVER_CONFIG.ip}
+              </span>
+            </div>
           </div>
         </div>
-      </div>
-      
-      <div className="max-w-7xl mx-auto mt-16 text-center md:text-left text-xs text-gray-600">
-        &copy; {new Date().getFullYear()} Clasher Network. All rights reserved. Not affiliated with Mojang AB.
+
+        {/* Disclaimer */}
+        <div className="border-t border-surface-border pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-xs text-text-muted">
+            &copy; {new Date().getFullYear()} {SERVER_CONFIG.name}. All rights reserved.
+          </p>
+          <p className="text-xs text-text-muted">
+            Not affiliated with Mojang Studios or Microsoft.
+          </p>
+        </div>
       </div>
     </footer>
   );
