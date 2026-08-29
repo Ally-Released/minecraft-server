@@ -4,28 +4,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { Check, Copy } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { SERVER_CONFIG } from "@/lib/config";
-
-async function writeClipboard(text: string) {
-  try {
-    await navigator.clipboard.writeText(text);
-    return true;
-  } catch {
-    /* insecure context or denied permission — fall through */
-  }
-  try {
-    const ta = document.createElement("textarea");
-    ta.value = text;
-    ta.setAttribute("readonly", "");
-    ta.style.cssText = "position:fixed;top:0;left:0;opacity:0";
-    document.body.appendChild(ta);
-    ta.select();
-    const ok = document.execCommand("copy");
-    document.body.removeChild(ta);
-    return ok;
-  } catch {
-    return false;
-  }
-}
+import { writeClipboard } from "@/lib/clipboard";
 
 type State = "idle" | "copied" | "failed";
 
@@ -96,7 +75,7 @@ export default function CopyIp({
               big ? "px-6 py-5 sm:px-8" : "px-5 py-3.5"
             }`}
           >
-            <span className="min-w-0">
+            <span className="min-w-0 flex-1">
               <span className="eyebrow block transition-colors duration-300 group-hover:text-ink-2">
                 {state === "failed"
                   ? "Press Ctrl + C to copy"
@@ -104,9 +83,13 @@ export default function CopyIp({
                     ? "Copied to clipboard"
                     : "Server address"}
               </span>
+              {/* The address never truncates — it scales instead. An
+                  ellipsised server IP is a broken server IP. */}
               <span
-                className={`hud mt-1.5 block truncate font-semibold text-ink transition-colors duration-300 ${
-                  big ? "text-xl sm:text-2xl md:text-[1.75rem]" : "text-base"
+                className={`hud mt-1.5 block font-semibold text-ink transition-colors duration-300 ${
+                  big
+                    ? "text-[clamp(0.9rem,3.6vw,1.375rem)]"
+                    : "text-[clamp(0.78rem,3vw,0.95rem)]"
                 } ${copied ? "text-glow" : "group-hover:text-paper"}`}
               >
                 {SERVER_CONFIG.ip}

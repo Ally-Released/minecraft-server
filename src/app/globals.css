@@ -252,6 +252,67 @@ body {
   --bevel: 8px;
 }
 
+/* ─── Inventory language ────────────────────────────────────── */
+/* A recessed square with a light top-left bevel and a dark bottom-
+   right one. This is the shape the whole store is built out of.   */
+
+.slot {
+  background: linear-gradient(158deg, #08182c 0%, #04101d 100%);
+  box-shadow:
+    inset 1.5px 1.5px 0 rgba(143, 220, 255, 0.09),
+    inset -1.5px -1.5px 0 rgba(0, 0, 0, 0.55);
+}
+
+.slot-lit {
+  box-shadow:
+    inset 1.5px 1.5px 0 color-mix(in srgb, var(--slot-accent, #4da3ff) 55%, transparent),
+    inset -1.5px -1.5px 0 rgba(0, 0, 0, 0.55),
+    0 0 26px -6px color-mix(in srgb, var(--slot-accent, #4da3ff) 70%, transparent);
+}
+
+/* Rarity chip / bar — the ladder marker used across the catalogue. */
+.rarity-bar {
+  background: linear-gradient(
+    90deg,
+    var(--slot-accent, #4da3ff) 0%,
+    color-mix(in srgb, var(--slot-accent, #4da3ff) 18%, transparent) 100%
+  );
+}
+
+/* Arena floor — tighter and colder than the world grid. Box PvP and FFA
+   use this so the combat pages read differently from the survival ones. */
+.arena-grid {
+  background-image:
+    linear-gradient(to right, rgba(77, 163, 255, 0.11) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(77, 163, 255, 0.11) 1px, transparent 1px);
+  background-size: 34px 34px;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 28%, #000 72%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 28%, #000 72%, transparent);
+}
+
+/* Horizontal scrollers fade at the edge instead of hard-cutting. */
+.scroll-x {
+  overflow-x: auto;
+  /* Without this an element's glow or shadow spawns a stray vertical
+     scrollbar inside the strip. Give the container padding for the glow. */
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+.scroll-x::-webkit-scrollbar {
+  height: 8px;
+}
+.scroll-x::-webkit-scrollbar-thumb {
+  background: var(--color-hair);
+  border-radius: 999px;
+}
+
+/* Enchantment-style metadata: the italic shimmer on an enchanted item. */
+.enchant {
+  color: var(--color-glow);
+  text-shadow: 0 0 14px color-mix(in srgb, var(--color-glow) 45%, transparent);
+}
+
 /* ─── Animation ─────────────────────────────────────────────── */
 
 @keyframes beacon-breathe {
@@ -308,6 +369,15 @@ body {
   }
 }
 
+@keyframes grid-drift {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 34px 34px;
+  }
+}
+
 @keyframes hint-fall {
   0%,
   100% {
@@ -338,6 +408,9 @@ body {
 }
 .animate-hint {
   animation: hint-fall 2.4s var(--ease-in-out-soft) infinite;
+}
+.animate-arena {
+  animation: grid-drift 6s linear infinite;
 }
 
 /* ─── Reduced motion ────────────────────────────────────────── */

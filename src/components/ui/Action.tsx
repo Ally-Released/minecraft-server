@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useMotionValue, useSpring } from "motion/react";
+import Link from "next/link";
 import { useRef, type ReactNode } from "react";
 
 type Variant = "primary" | "ghost" | "discord";
@@ -91,17 +92,28 @@ export default function Action({
           : ""
       } ${className}`}
     >
-      {href ? (
+      {href && external ? (
         <a
           href={href}
           aria-label={ariaLabel}
           onClick={onClick}
-          {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+          target="_blank"
+          rel="noopener noreferrer"
           className={face}
           style={{ ["--slab-fill" as string]: FACE[variant] }}
         >
           {inner}
         </a>
+      ) : href ? (
+        <Link
+          href={href}
+          aria-label={ariaLabel}
+          onClick={onClick}
+          className={face}
+          style={{ ["--slab-fill" as string]: FACE[variant] }}
+        >
+          {inner}
+        </Link>
       ) : (
         <button
           type="button"

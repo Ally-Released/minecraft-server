@@ -2,51 +2,55 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { SERVER_CONFIG } from "@/lib/config";
+import type { ServerStatus } from "@/lib/status";
+import { useLiveStatus } from "@/lib/useLiveStatus";
+import { useCart } from "@/components/store/cart";
 import Action from "@/components/ui/Action";
 import CopyIp from "@/components/ui/CopyIp";
+import Icon from "@/components/ui/Icon";
 
-const DESTINATIONS = [
-  { id: "home", label: "Home" },
-  { id: "how-to-play", label: "How to Play" },
-  { id: "rules", label: "Rules" },
-  { id: "discord", label: "Discord" },
+const LINKS = [
+  { href: "/", label: "Home" },
+  { href: "/modes", label: "Game Modes" },
+  { href: "/how-to-play", label: "How to Play" },
+  { href: "/rules", label: "Rules" },
+  { href: "/store", label: "Store", emphasis: true },
+  { href: "/discord", label: "Discord" },
 ];
 
-export default function Nav() {
+function isActive(pathname: string, href: string) {
+  return href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
+}
+
+export default function Nav({ status: initial }: { status: ServerStatus }) {
+  const pathname = usePathname();
+  const status = useLiveStatus(initial);
+  const cart = useCart();
   const [scrolled, setScrolled] = useState(false);
-  const [active, setActive] = useState("home");
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    let frame = 0;
-    const read = () => {
-      frame = 0;
-      setScrolled(window.scrollY > 40);
+  // Only the home page has artwork worth letting the bar float over.
+  const overArt = pathname === "/";
+  const solid = scrolled || !overArt;
 
-      // Sections between two destinations belong to the one above them, so
-      // the indicator never blanks out mid-journey.
-      const line = window.scrollY + 140;
-      let current = DESTINATIONS[0].id;
-      for (const d of DESTINATIONS) {
-        const el = document.getElementById(d.id);
-        if (el && el.offsetTop <= line) current = d.id;
-      }
-      setActive(current);
-    };
-    const onScroll = () => {
-      if (!frame) frame = requestAnimationFrame(read);
-    };
-    read();
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
-    return () => {
-      if (frame) cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Close the menu when the route changes. Adjusted during render rather than
+  // in an effect so the panel never paints for a frame on the new page.
+  const [lastPath, setLastPath] = useState(pathname);
+  if (lastPath !== pathname) {
+    setLastPath(pathname);
+    setOpen(false);
+  }
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -58,45 +62,32 @@ export default function Nav() {
     };
   }, [open]);
 
-  const go = useCallback((id: string) => {
-    setOpen(false);
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, []);
+  const online = status.state === "online";
 
   return (
     <>
       <header
         className={`fixed inset-x-0 top-0 z-60 transition-all duration-500 ${
-          scrolled
-            ? "bg-abyss/78 py-2.5 backdrop-blur-xl"
-            : "bg-transparent py-5 backdrop-blur-0"
+          solid ? "bg-abyss/82 py-2.5 backdrop-blur-xl" : "bg-transparent py-5 backdrop-blur-0"
         }`}
       >
-        {/* luminous hairline, lit only once the bar becomes a surface */}
         <div
           aria-hidden
           className={`absolute inset-x-0 bottom-0 h-px transition-opacity duration-500 ${
-            scrolled ? "opacity-100" : "opacity-0"
+            solid ? "opacity-100" : "opacity-0"
           }`}
           style={{
             background:
-              "linear-gradient(90deg, transparent, rgba(77,163,255,0.35) 22%, rgba(134,229,255,0.6) 50%, rgba(77,163,255,0.35) 78%, transparent)",
+              "linear-gradient(90deg, transparent, rgba(77,163,255,0.32) 20%, rgba(134,229,255,0.55) 50%, rgba(77,163,255,0.32) 80%, transparent)",
           }}
         />
 
         <nav
           aria-label="Primary"
-          className="mx-auto flex max-w-[88rem] items-center justify-between gap-6 px-5 sm:px-8"
+          className="mx-auto flex max-w-[92rem] items-center gap-6 px-5 sm:px-8"
         >
           {/* Identity */}
-          <a
-            href="#home"
-            onClick={(e) => {
-              e.preventDefault();
-              go("home");
-            }}
-            className="group flex shrink-0 items-center gap-3"
-          >
+          <Link href="/" className="group flex shrink-0 items-center gap-3">
             <span className="slab slab-sm block h-9 w-9 shrink-0 transition-transform duration-500 group-hover:rotate-3">
               <span className="slab-face block h-full w-full overflow-hidden">
                 <Image
@@ -109,31 +100,27 @@ export default function Nav() {
                 />
               </span>
             </span>
-            <span className="hidden sm:block">
-              <span className="display-tight block text-[1.05rem] leading-none tracking-[0.14em] text-ink transition-colors duration-300 group-hover:text-paper">
+            <span>
+              <span className="display-tight block text-[0.95rem] leading-none tracking-[0.14em] text-ink transition-colors duration-300 group-hover:text-paper xl:text-[1.05rem]">
                 {SERVER_CONFIG.name}
               </span>
-              <span className="hud mt-1 block text-[0.58rem] uppercase leading-none tracking-[0.3em] text-ink-3">
+              <span className="hud mt-1 hidden text-[0.55rem] uppercase leading-none tracking-[0.3em] text-ink-3 sm:block">
                 Survival Network
               </span>
             </span>
-          </a>
+          </Link>
 
           {/* Destinations */}
-          <ul className="hidden items-center gap-1 md:flex">
-            {DESTINATIONS.map((d) => {
-              const on = active === d.id;
+          <ul className="mx-auto hidden items-center lg:flex">
+            {LINKS.map((l) => {
+              const on = isActive(pathname, l.href);
               return (
-                <li key={d.id}>
-                  <a
-                    href={`#${d.id}`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      go(d.id);
-                    }}
-                    aria-current={on ? "true" : undefined}
-                    className={`relative block px-4 py-2.5 text-[0.82rem] font-medium tracking-wide transition-colors duration-300 ${
-                      on ? "text-paper" : "text-ink-2 hover:text-ice"
+                <li key={l.href}>
+                  <Link
+                    href={l.href}
+                    aria-current={on ? "page" : undefined}
+                    className={`relative block px-3.5 py-2.5 text-[0.82rem] font-medium tracking-wide transition-colors duration-300 xl:px-4 ${
+                      on ? "text-paper" : l.emphasis ? "text-ice" : "text-ink-2 hover:text-ice"
                     }`}
                   >
                     {on && (
@@ -144,23 +131,68 @@ export default function Nav() {
                         transition={{ type: "spring", stiffness: 420, damping: 34 }}
                       />
                     )}
-                    {d.label}
-                  </a>
+                    {/* The store is the only link that carries a mark of its own. */}
+                    {l.emphasis && (
+                      <span
+                        aria-hidden
+                        className="mr-2 inline-block h-1.5 w-1.5 rotate-45 bg-electric align-middle"
+                      />
+                    )}
+                    {l.label}
+                  </Link>
                 </li>
               );
             })}
           </ul>
 
-          {/* Entry */}
-          <div className="flex shrink-0 items-center gap-3">
-            <Action
-              variant="primary"
-              className="hidden md:inline-block"
-              onClick={() => go("how-to-play")}
-              ariaLabel="How to join the server"
+          {/* Instruments */}
+          <div className="ml-auto flex shrink-0 items-center gap-2.5 lg:ml-0">
+            <Link
+              href="/#live"
+              className="slot hidden items-center gap-2.5 px-3 py-2 transition-colors duration-300 hover:brightness-125 xl:flex"
             >
-              <span className="text-[0.8rem]">Play Now</span>
-            </Action>
+              <span className="relative flex h-2 w-2">
+                {online && (
+                  <span
+                    className="absolute inset-0 rounded-full border border-glow/60"
+                    style={{ animation: "pulse-ring 2.4s var(--ease-out-quart) infinite" }}
+                  />
+                )}
+                <span className={`h-2 w-2 rounded-full ${online ? "bg-glow" : "bg-ink-3"}`} />
+              </span>
+              <span className="hud text-[0.6rem] uppercase tracking-[0.2em] text-ink-2">
+                {status.players ? `${status.players.online} online` : "Checking"}
+              </span>
+            </Link>
+
+            <button
+              type="button"
+              id="cart-anchor"
+              onClick={() => cart.setOpen(true)}
+              aria-label={`Open cart, ${cart.count} item${cart.count === 1 ? "" : "s"}`}
+              className="slot relative grid h-10 w-10 place-items-center text-ink-2 transition-colors duration-300 hover:text-glow"
+            >
+              <Icon name="cart" size={18} />
+              <AnimatePresence>
+                {cart.count > 0 && (
+                  <motion.span
+                    initial={{ scale: 0.3, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.3, opacity: 0 }}
+                    transition={{ type: "spring", stiffness: 520, damping: 20 }}
+                    className="hud absolute -right-1.5 -top-1.5 grid h-5 min-w-5 place-items-center bg-electric px-1 text-[0.6rem] font-semibold text-abyss"
+                  >
+                    {cart.count}
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </button>
+
+            <span className="hidden md:block">
+              <Action variant="primary" href="/how-to-play">
+                <span className="text-[0.8rem]">Play Now</span>
+              </Action>
+            </span>
 
             <button
               type="button"
@@ -168,7 +200,7 @@ export default function Nav() {
               aria-expanded={open}
               aria-controls="mobile-nav"
               aria-label={open ? "Close menu" : "Open menu"}
-              className="relative grid h-11 w-11 place-items-center md:hidden"
+              className="relative grid h-11 w-11 place-items-center lg:hidden"
             >
               <span
                 className={`absolute h-px w-6 bg-ink transition-all duration-300 ${
@@ -196,45 +228,37 @@ export default function Nav() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-50 flex flex-col justify-between bg-abyss/97 px-6 pb-10 pt-28 backdrop-blur-2xl md:hidden"
+            transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed inset-0 z-50 flex flex-col justify-between overflow-y-auto bg-abyss/97 px-6 pb-10 pt-24 backdrop-blur-2xl lg:hidden"
           >
             <div
               aria-hidden
               className="pointer-events-none absolute inset-0 opacity-40"
               style={{
-                background:
-                  "radial-gradient(90% 55% at 70% 82%, rgba(45,120,205,0.35), transparent 70%)",
+                background: "radial-gradient(90% 55% at 70% 82%, rgba(45,120,205,0.35), transparent 70%)",
               }}
             />
-            <ul className="relative space-y-1">
-              {DESTINATIONS.map((d, i) => (
+            <ul className="relative">
+              {LINKS.map((l, i) => (
                 <motion.li
-                  key={d.id}
+                  key={l.href}
                   initial={{ opacity: 0, x: -18 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.06 + i * 0.06, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{ delay: 0.05 + i * 0.05, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
                   className="border-b border-hair/70"
                 >
-                  <a
-                    href={`#${d.id}`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      go(d.id);
-                    }}
-                    className="flex items-baseline gap-4 py-4"
-                  >
-                    <span className="hud text-[0.65rem] text-ink-3">
+                  <Link href={l.href} className="flex items-baseline gap-4 py-3.5">
+                    <span className="hud text-[0.6rem] text-ink-3">
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <span
-                      className={`display text-4xl ${
-                        active === d.id ? "text-glow" : "text-ink"
+                      className={`display text-[2rem] ${
+                        isActive(pathname, l.href) ? "text-glow" : "text-ink"
                       }`}
                     >
-                      {d.label}
+                      {l.label}
                     </span>
-                  </a>
+                  </Link>
                 </motion.li>
               ))}
             </ul>
@@ -242,17 +266,11 @@ export default function Nav() {
             <motion.div
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.5 }}
-              className="relative space-y-4"
+              transition={{ delay: 0.28, duration: 0.45 }}
+              className="relative mt-10 space-y-3"
             >
               <CopyIp size="sm" />
-              <Action
-                variant="discord"
-                href={SERVER_CONFIG.discord}
-                external
-                className="w-full"
-                onClick={() => setOpen(false)}
-              >
+              <Action variant="discord" href={SERVER_CONFIG.discord} external className="w-full">
                 Join Discord
               </Action>
             </motion.div>

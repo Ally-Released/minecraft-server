@@ -31,6 +31,20 @@ type McStatusResponse = {
 };
 
 /**
+ * MOTDs are full of decorative emoji and dingbats that land as tofu boxes in a
+ * webfont. Strip the symbol ranges, keep the words.
+ */
+function cleanMotd(raw?: string): string | null {
+  if (!raw) return null;
+  const line = raw
+    .split("\n")[0]
+    .replace(/[\u{1F000}-\u{1FAFF}\u{2190}-\u{2BFF}\u{FE00}-\u{FE0F}\u{2600}-\u{27BF}\u{200D}]/gu, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  return line || null;
+}
+
+/**
  * Queries the configured status API. Swapping providers means rewriting only
  * this function — everything downstream speaks `ServerStatus`.
  */
@@ -58,7 +72,7 @@ export async function fetchServerStatus(): Promise<ServerStatus> {
           ? { online, max }
           : null,
       version: data.version?.name_clean?.trim() || null,
-      motd: data.motd?.clean?.trim().split("\n")[0] || null,
+      motd: cleanMotd(data.motd?.clean),
       checkedAt,
     };
   } catch {

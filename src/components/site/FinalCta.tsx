@@ -31,21 +31,27 @@ export default function FinalCta() {
             <span className="eyebrow text-ice/80">Last thing</span>
           </motion.div>
 
-          <h2 className="display mt-7 text-[clamp(2.8rem,9vw,7.5rem)]">
+          {/* The trigger lives on the heading, not on the moving spans: a span
+              parked below an overflow-hidden edge is clipped out of every
+              intersection rect, so it could never observe itself into view. */}
+          <motion.h2
+            className="display mt-7 text-[clamp(2.8rem,9vw,7.5rem)]"
+            initial="hidden"
+            whileInView="shown"
+            viewport={{ once: true, margin: "-15%" }}
+          >
             {["Your adventure", "starts now."].map((line, i) => (
               <span key={line} className="block overflow-hidden pb-[0.06em]">
                 <motion.span
                   className={`block ${i === 1 ? "lit" : "text-paper"}`}
-                  initial={{ y: "108%" }}
-                  whileInView={{ y: "0%" }}
-                  viewport={{ once: true, margin: "-15%" }}
+                  variants={{ hidden: { y: "108%" }, shown: { y: "0%" } }}
                   transition={{ duration: 1, delay: i * 0.1, ease: EASE }}
                 >
                   {line}
                 </motion.span>
               </span>
             ))}
-          </h2>
+          </motion.h2>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -64,14 +70,7 @@ export default function FinalCta() {
             transition={{ duration: 0.8, delay: 0.35, ease: EASE }}
             className="mt-5 flex flex-wrap items-center gap-3"
           >
-            <Action
-              variant="primary"
-              onClick={() =>
-                document
-                  .getElementById("how-to-play")
-                  ?.scrollIntoView({ behavior: "smooth", block: "start" })
-              }
-            >
+            <Action variant="primary" href="/how-to-play">
               Play Now
             </Action>
             <Action variant="ghost" href={SERVER_CONFIG.discord} external>

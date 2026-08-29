@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { SERVER_CONFIG } from "@/lib/config";
 import type { ServerStatus } from "@/lib/status";
 import { useLiveStatus } from "@/lib/useLiveStatus";
@@ -37,25 +36,22 @@ function Readout({
 
 export default function StatusCore({ initial }: { initial: ServerStatus }) {
   const status = useLiveStatus(initial);
-  const [checked, setChecked] = useState("");
 
-  // Formatted on the client only — a server-rendered local time would not
-  // match the visitor's locale and would trip hydration.
-  useEffect(() => {
-    const stamp = new Date(status.checkedAt);
-    setChecked(
-      Number.isNaN(stamp.getTime()) || stamp.getTime() === 0
-        ? ""
-        : stamp.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })
-    );
-  }, [status.checkedAt]);
+  // Server and client format this in different timezones by design — the
+  // visitor should see their own clock, so the mismatch is suppressed rather
+  // than deferred to an effect.
+  const stamp = new Date(status.checkedAt);
+  const checked =
+    Number.isNaN(stamp.getTime()) || stamp.getTime() === 0
+      ? ""
+      : stamp.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
 
   const online = status.state === "online";
   const stateLabel =
     status.state === "online" ? "Online" : status.state === "offline" ? "Offline" : "Unknown";
 
   return (
-    <section className="relative isolate overflow-hidden py-28 sm:py-36">
+    <section id="live" className="relative isolate scroll-mt-28 overflow-hidden py-28 sm:py-36">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10"
@@ -105,7 +101,7 @@ export default function StatusCore({ initial }: { initial: ServerStatus }) {
                 x2={x}
                 y2={y}
                 stroke="url(#wire)"
-                strokeWidth="0.25"
+                strokeWidth="1"
                 strokeDasharray="1.6 2.4"
                 vectorEffect="non-scaling-stroke"
                 style={{ animation: `halo-breathe ${5 + i}s ease-in-out ${i * 0.5}s infinite` }}
@@ -119,8 +115,8 @@ export default function StatusCore({ initial }: { initial: ServerStatus }) {
               <Readout label="Status" value={stateLabel} align="right" accent={online} />
               <Readout
                 label="Version"
-                value={status.version ?? SERVER_CONFIG.version}
-                note={status.version ? "Reported by server" : "From configuration"}
+                value={SERVER_CONFIG.version}
+                note={status.version ? `Server reports ${status.version}` : "From configuration"}
                 align="right"
               />
             </Reveal>
@@ -210,7 +206,10 @@ export default function StatusCore({ initial }: { initial: ServerStatus }) {
 
           <Reveal delay={0.1} className="mx-auto mt-16 max-w-xl">
             <CopyIp />
-            <p className="hud mt-4 text-center text-[0.62rem] uppercase tracking-[0.24em] text-ink-3">
+            <p
+              suppressHydrationWarning
+              className="hud mt-4 text-center text-[0.62rem] uppercase tracking-[0.24em] text-ink-3"
+            >
               {status.state === "unknown"
                 ? "Status query unavailable — retrying"
                 : checked

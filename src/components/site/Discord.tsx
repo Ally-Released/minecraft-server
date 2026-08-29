@@ -3,12 +3,18 @@ import { SERVER_CONFIG } from "@/lib/config";
 import Action from "@/components/ui/Action";
 import Reveal from "@/components/ui/Reveal";
 
-export default function Discord() {
+export default function Discord({ standalone = false }: { standalone?: boolean }) {
   const { community } = SERVER_CONFIG;
   const invite = SERVER_CONFIG.discord.replace(/^https?:\/\//, "");
+  const Heading = standalone ? "h1" : "h2";
 
   return (
-    <section id="discord" className="relative isolate overflow-hidden py-28 sm:py-36">
+    <section
+      id="discord"
+      className={`relative isolate overflow-hidden ${
+        standalone ? "pb-28 pt-36 sm:pb-36 sm:pt-44" : "py-28 sm:py-36"
+      }`}
+    >
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10"
@@ -26,10 +32,10 @@ export default function Discord() {
                 <span aria-hidden className="h-px w-9 bg-gradient-to-r from-glow to-transparent" />
                 <span className="eyebrow">The community</span>
               </div>
-              <h2 className="display mt-7 text-[clamp(2.4rem,6.4vw,5.4rem)] text-paper">
+              <Heading className="display mt-7 text-[clamp(2.4rem,6.4vw,5.4rem)] text-paper">
                 {community.headline[0]}
                 <span className="block lit">{community.headline[1]}</span>
-              </h2>
+              </Heading>
               <p className="prose-lede mt-7 max-w-md text-[1.02rem]">{community.body}</p>
             </Reveal>
 

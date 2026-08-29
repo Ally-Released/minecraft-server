@@ -27,9 +27,6 @@ function Line({ text, delay, lit }: { text: string; delay: number; lit?: boolean
 }
 
 export default function Hero({ status }: { status: ServerStatus }) {
-  const go = (id: string) =>
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-
   return (
     <section id="home" className="relative isolate min-h-svh overflow-hidden">
       <WorldScene />
@@ -45,10 +42,12 @@ export default function Hero({ status }: { status: ServerStatus }) {
               className="mb-7 flex items-center gap-3"
             >
               <span aria-hidden className="h-px w-9 bg-gradient-to-r from-glow to-transparent" />
-              <span className="eyebrow text-ice/80">{SERVER_CONFIG.hero.eyebrow}</span>
+              <span className="eyebrow text-ice/80 max-sm:tracking-[0.18em]">
+                {SERVER_CONFIG.hero.eyebrow}
+              </span>
             </motion.div>
 
-            <h1 className="display text-[clamp(2.9rem,10.5vw,9.5rem)]">
+            <h1 className="display text-[clamp(2.5rem,7.4vw,7rem)]">
               {SERVER_CONFIG.hero.headline.map((line, i) => (
                 <Line
                   key={line}
@@ -74,7 +73,7 @@ export default function Hero({ status }: { status: ServerStatus }) {
               transition={{ duration: 0.9, delay: 0.82, ease: EASE }}
               className="mt-10 flex flex-wrap items-center gap-3"
             >
-              <Action variant="primary" onClick={() => go("how-to-play")}>
+              <Action variant="primary" href="/how-to-play">
                 Play Now
               </Action>
               <Action variant="ghost" href={SERVER_CONFIG.discord} external>

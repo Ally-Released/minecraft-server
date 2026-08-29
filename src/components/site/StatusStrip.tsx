@@ -23,7 +23,9 @@ export default function StatusStrip({ initial }: { initial: ServerStatus }) {
       "Players",
       status.players ? `${status.players.online} / ${status.players.max}` : "—",
     ],
-    ["Version", status.version ?? SERVER_CONFIG.version],
+    // The query API reports the proxy build string, which is not the version a
+    // player types into their launcher — so the configured value leads.
+    ["Version", SERVER_CONFIG.version],
     ["Edition", SERVER_CONFIG.editions.join(" · ")],
   ];
 

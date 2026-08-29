@@ -13,11 +13,17 @@ const CATEGORIES: { key: RuleCategory; label: string; caption: string }[] = [
   { key: "chat", label: "Chat", caption: "Keeping the channel usable" },
 ];
 
-export default function Rules() {
+export default function Rules({ standalone = false }: { standalone?: boolean }) {
   const [open, setOpen] = useState<RuleCategory | null>("general");
+  const Heading = standalone ? "h1" : "h2";
 
   return (
-    <section id="rules" className="relative isolate overflow-hidden py-28 sm:py-36">
+    <section
+      id="rules"
+      className={`relative isolate overflow-hidden ${
+        standalone ? "pb-28 pt-36 sm:pb-36 sm:pt-44" : "py-28 sm:py-36"
+      }`}
+    >
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10"
@@ -33,10 +39,10 @@ export default function Rules() {
               <span aria-hidden className="h-px w-9 bg-gradient-to-r from-glow to-transparent" />
               <span className="eyebrow">The codex</span>
             </div>
-            <h2 className="display mt-7 text-[clamp(2.4rem,6.4vw,5.4rem)] text-paper">
+            <Heading className="display mt-7 text-[clamp(2.4rem,6.4vw,5.4rem)] text-paper">
               Short list.
               <span className="block text-ice/85">Taken seriously.</span>
-            </h2>
+            </Heading>
           </Reveal>
           <Reveal delay={0.12} className="lg:col-span-4 lg:col-start-9 lg:self-end">
             <p className="prose-lede max-w-sm text-[1.02rem]">
@@ -167,14 +173,7 @@ export default function Rules() {
               Ready to enter?
             </p>
             <div className="flex flex-wrap gap-3">
-              <Action
-                variant="primary"
-                onClick={() =>
-                  document
-                    .getElementById("how-to-play")
-                    ?.scrollIntoView({ behavior: "smooth", block: "start" })
-                }
-              >
+              <Action variant="primary" href="/how-to-play">
                 Play Now
               </Action>
               <Action variant="ghost" href={SERVER_CONFIG.discord} external>

@@ -31,6 +31,8 @@ export type RidgeOptions = {
   base?: number;
   /** number of overlapping frequencies; more = more jagged */
   octaves?: number;
+  /** how many summits across the width — fewer for near layers, more for far */
+  peaks?: number;
   /** chance per column of a sheer cliff step */
   cliffs?: number;
 };
@@ -40,6 +42,8 @@ export type Ridge = {
   fill: string;
   /** open polyline along the crest, for rim lighting */
   line: string;
+  /** the crest itself, so anything placed on the ridge lands on it exactly */
+  points: [number, number][];
 };
 
 export function ridge({
@@ -49,38 +53,51 @@ export function ridge({
   block = 16,
   amplitude = 0.34,
   base = 0.55,
-  octaves = 4,
-  cliffs = 0.06,
+  octaves = 3,
+  peaks = 4,
+  cliffs = 0.02,
 }: RidgeOptions): Ridge {
   const rand = rng(seed);
   const cols = Math.ceil(width / block);
 
-  // Layered sines stand in for noise: cheap, deterministic, and the sum of a
-  // few octaves is indistinguishable from real noise at silhouette scale.
+  // Ridged noise, not plain sine noise. `1 - |sin|` gives sharp summits and
+  // broad valleys — the difference between a mountain range and a skyline.
+  // Amplitude falls off steeply per octave so the low frequency reads as the
+  // silhouette and the rest is only texture on its flanks.
   const waves = Array.from({ length: octaves }, (_, k) => ({
-    freq: (k + 1) * (0.6 + rand() * 1.5),
+    freq: k === 0 ? peaks * (0.85 + rand() * 0.3) : peaks * (k + 1) * (1.3 + rand() * 0.7),
     phase: rand() * Math.PI * 2,
-    amp: 1 / (k + 1.35),
+    amp: 1 / Math.pow(k + 1, 1.7),
   }));
   const norm = waves.reduce((s, w) => s + w.amp, 0);
 
   let steps = "";
   let prevY = NaN;
   let drift = 0;
+  // Mean-reverting wobble applied *before* quantisation. Without it every
+  // slope quantises into a perfectly even staircase and the range reads as a
+  // ziggurat instead of a mountain.
+  let wobble = 0;
+  const points: [number, number][] = [];
 
   for (let i = 0; i <= cols; i++) {
     const t = i / cols;
     let h = 0;
-    for (const w of waves) h += Math.sin(t * Math.PI * 2 * w.freq + w.phase) * w.amp;
+    for (const w of waves) {
+      h += (1 - Math.abs(Math.sin(t * Math.PI * w.freq + w.phase))) * w.amp;
+    }
     h /= norm;
 
     // occasional sheer face — natural ranges are not evenly noisy
-    if (rand() < cliffs) drift += (rand() - 0.5) * amplitude * 0.9;
-    drift *= 0.92;
+    if (rand() < cliffs) drift += (rand() - 0.5) * amplitude * 0.5;
+    drift *= 0.9;
 
-    const raw = base * height - (h * 0.5 + drift) * amplitude * height;
+    wobble = wobble * 0.87 + (rand() - 0.5) * block * 0.5;
+
+    const raw = base * height - (h + drift) * amplitude * height + wobble;
     const y = Math.round(Math.min(height, Math.max(0, raw)) / block) * block;
     const x = i * block;
+    points.push([x, y]);
 
     if (i === 0) {
       steps += `M${x},${y}`;
@@ -96,6 +113,7 @@ export function ridge({
   return {
     fill: `${steps}L${end},${height}L0,${height}Z`,
     line: steps,
+    points,
   };
 }
 
@@ -121,37 +139,37 @@ export function treeline({
   let x = 0;
 
   while (x < width) {
-    const gap = block * (1 + Math.floor(rand() * 3));
     if (rand() > density) {
-      x += gap;
+      x += block * (1 + Math.floor(rand() * 3));
       d += `L${x},${height}`;
       continue;
     }
 
+    // A stepped isosceles triangle: each tier narrows by one block as it
+    // climbs. Read at silhouette scale that is unmistakably a spruce.
     const tiers = 3 + Math.floor(rand() * 3);
-    const trunkH = Math.round((height * (0.35 + rand() * 0.5)) / block) * block;
-    const halfW = block * (1 + Math.floor(rand() * 2));
-    const top = height - trunkH;
-    const cx = x + halfW * tiers * 0.5;
+    const unit = block * (0.7 + rand() * 0.7);
+    const tierH = block * (0.9 + rand() * 0.8);
+    const halfW = unit * tiers;
+    const cx = x + halfW;
 
-    // step up the left flank, across the crown, back down the right flank
-    d += `L${x},${height}`;
-    for (let k = tiers; k >= 1; k--) {
-      const w = halfW * k * 0.55;
-      const y = top + ((height - top) / tiers) * (k - 1);
-      d += `L${cx - w},${y + (height - top) / tiers}L${cx - w},${y}`;
+    for (let k = 0; k < tiers; k++) {
+      const w = halfW - unit * k;
+      const y = height - tierH * k;
+      d += `L${cx - w},${y}L${cx - w},${y - tierH}`;
     }
-    d += `L${cx},${top - block}L${cx + halfW * 0.55},${top}`;
-    for (let k = 1; k <= tiers; k++) {
-      const w = halfW * k * 0.55;
-      const y = top + ((height - top) / tiers) * (k - 1);
-      d += `L${cx + w},${y}L${cx + w},${y + (height - top) / tiers}`;
+    d += `L${cx},${height - tierH * (tiers + 0.5)}`;
+    for (let k = tiers - 1; k >= 0; k--) {
+      const w = halfW - unit * k;
+      const y = height - tierH * (k + 1);
+      d += `L${cx + w},${y}L${cx + w},${y + tierH}`;
     }
-    x = cx + halfW * tiers * 0.55 + gap;
+
+    x = cx + halfW + block * (0.5 + rand() * 2);
     d += `L${x},${height}`;
   }
 
-  return `${d}L${width},${height}L${width},${height}Z`;
+  return `${d}L${width},${height}Z`;
 }
 
 /**

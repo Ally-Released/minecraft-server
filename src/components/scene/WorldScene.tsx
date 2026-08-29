@@ -5,14 +5,25 @@ import { MONOLITH, ridge, stars, treeline } from "@/lib/terrain";
 import Motes from "./Motes";
 
 /* Generated once per module load — deterministic, so SSR and hydration agree. */
-const FAR = ridge({ seed: 20481, height: 600, block: 22, amplitude: 0.46, base: 0.62, octaves: 5, cliffs: 0.05 });
-const MID = ridge({ seed: 71209, height: 600, block: 18, amplitude: 0.38, base: 0.7, octaves: 4, cliffs: 0.09 });
-const NEAR = ridge({ seed: 33117, height: 600, block: 26, amplitude: 0.3, base: 0.78, octaves: 3, cliffs: 0.12 });
-const TREES = treeline({ seed: 90210, height: 240, block: 11, density: 0.82 });
-const STARS = stars(4242, 90);
+// Far ranges carry more, smaller summits; near ranges fewer, broader ones.
+// That frequency gradient is most of what sells distance in a flat silhouette.
+const FAR = ridge({ seed: 20481, height: 600, block: 14, amplitude: 0.52, base: 0.7, octaves: 4, peaks: 6, cliffs: 0.02 });
+const MID = ridge({ seed: 7124, height: 600, block: 18, amplitude: 0.46, base: 0.82, octaves: 3, peaks: 3.4, cliffs: 0.02 });
+const NEAR = ridge({ seed: 33117, height: 600, block: 28, amplitude: 0.38, base: 0.86, octaves: 2, peaks: 1.8, cliffs: 0.03 });
+const TREES = treeline({ seed: 90210, height: 240, block: 13, density: 0.86 });
+const STARS = stars(4242, 62);
 
 /** Horizontal position of the only light source in this world. */
 const LIGHT_X = 68; // %
+
+/**
+ * Somebody lives out there. Sampled straight off the generated crest so the
+ * huts sit on the ridge instead of hovering near it.
+ */
+const SETTLEMENTS = [0.12, 0.26, 0.4, 0.55, 0.82, 0.93].map((t, i) => {
+  const [x, y] = MID.points[Math.floor(t * (MID.points.length - 1))];
+  return { x, y, w: 14 + (i % 3) * 5, h: 16 + (i % 2) * 8, key: t };
+});
 
 function depth(x: number): CSSProperties {
   return {
@@ -89,9 +100,9 @@ export default function WorldScene({
           className="absolute inset-0"
           style={{
             background: `
-              radial-gradient(120% 78% at ${LIGHT_X}% 62%, rgba(45,120,205,${closing ? 0.4 : 0.28}) 0%, rgba(10,34,70,0.18) 32%, transparent 62%),
-              radial-gradient(85% 55% at 22% 8%, rgba(20,64,111,0.28) 0%, transparent 60%),
-              linear-gradient(180deg, #01040c 0%, #020714 34%, #041028 62%, #061834 84%, #08203f 100%)
+              radial-gradient(120% 74% at ${LIGHT_X}% 66%, rgba(58,140,220,${closing ? 0.46 : 0.34}) 0%, rgba(16,52,100,0.24) 34%, transparent 64%),
+              radial-gradient(85% 55% at 22% 6%, rgba(20,64,111,0.24) 0%, transparent 58%),
+              linear-gradient(180deg, #01040c 0%, #020a18 30%, #05152f 56%, #0a2851 80%, #0e3560 100%)
             `,
           }}
         />
@@ -116,25 +127,29 @@ export default function WorldScene({
           ))}
         </svg>
 
-        {/* Moon */}
-        <div className="absolute left-[14%] top-[13%]" style={depth(9)}>
+        {/* Moon — parked in open sky between the headline and the structure */}
+        <div className="absolute left-[16%] top-[6%] sm:left-[42%] sm:top-[11%]" style={depth(9)}>
           <div className="relative">
             <div className="absolute -inset-12 rounded-full bg-[radial-gradient(circle,rgba(150,200,255,0.22),transparent_68%)] blur-xl" />
             <div className="h-14 w-14 rounded-full bg-[radial-gradient(circle_at_34%_30%,#f2f8ff,#a9c8ec_58%,#5f86b5)] shadow-[0_0_60px_rgba(160,205,255,0.35)] sm:h-16 sm:w-16" />
           </div>
         </div>
 
-        {/* ── Far range ───────────────────────────────────────── */}
+        {/* ── Far range ───────────────────────────────────────────
+            Atmospheric perspective: distance means *lighter and hazier*,
+            not darker. Without this inversion the ranges vanish into the
+            sky and the scene reads flat.                              */}
         <svg
-          className="absolute inset-x-0 bottom-0 h-[58%] w-full opacity-70 blur-[2.5px]"
+          className="absolute inset-x-0 bottom-0 h-[58%] w-full opacity-90 blur-[2.5px]"
           viewBox="0 0 1600 600"
           preserveAspectRatio="xMidYMax slice"
           style={depth(11)}
         >
           <defs>
             <linearGradient id="farFill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#0c2444" />
-              <stop offset="100%" stopColor="#05101f" />
+              <stop offset="0%" stopColor="#1d3f6b" />
+              <stop offset="60%" stopColor="#14304f" />
+              <stop offset="100%" stopColor="#0d2137" />
             </linearGradient>
             <radialGradient id="farRim" cx={`${LIGHT_X}%`} cy="30%" r="46%">
               <stop offset="0%" stopColor="#7fd4ff" stopOpacity="0.85" />
@@ -145,26 +160,35 @@ export default function WorldScene({
           <path d={FAR.line} fill="none" stroke="url(#farRim)" strokeWidth="3" />
         </svg>
 
+        {/* Haze pooling along the horizon — what the ranges are read against */}
+        <div
+          aria-hidden
+          className="absolute inset-x-0 bottom-[26%] h-[26%] blur-2xl"
+          style={{
+            background: `radial-gradient(70% 100% at ${LIGHT_X}% 100%, rgba(72,150,225,0.34), transparent 72%)`,
+          }}
+        />
+
         {/* ── The structure + its light ───────────────────────── */}
         <div
-          className="absolute bottom-[34%] h-[46%] w-[26%] max-w-[420px] min-w-[190px] -translate-x-1/2"
+          className="absolute bottom-[29%] h-[38%] w-[19%] max-w-[300px] min-w-[130px] -translate-x-1/2"
           style={{ ...depth(16), left: `${LIGHT_X}%` }}
         >
           {/* volumetric shaft */}
-          <div className="absolute bottom-[62%] left-1/2 h-[190vh] w-[38%] -translate-x-1/2 origin-bottom">
+          <div className="absolute bottom-[64%] left-1/2 h-[150vh] w-[46%] -translate-x-1/2 origin-bottom">
             <div
-              className="animate-beacon absolute inset-0 blur-[14px]"
+              className="animate-beacon absolute inset-0 blur-[18px]"
               style={{
                 background:
-                  "linear-gradient(to top, rgba(134,229,255,0.5), rgba(77,163,255,0.16) 38%, transparent 82%)",
-                clipPath: "polygon(38% 100%, 62% 100%, 96% 0%, 4% 0%)",
+                  "linear-gradient(to top, rgba(122,210,255,0.34), rgba(77,163,255,0.1) 30%, transparent 66%)",
+                clipPath: "polygon(40% 100%, 60% 100%, 100% 0%, 0% 0%)",
               }}
             />
             <div
-              className="animate-beacon absolute inset-x-[42%] bottom-0 top-0 blur-[3px]"
+              className="animate-beacon absolute inset-x-[46%] bottom-0 top-0 blur-[4px]"
               style={{
                 background:
-                  "linear-gradient(to top, rgba(198,244,255,0.9), rgba(134,229,255,0.4) 30%, transparent 72%)",
+                  "linear-gradient(to top, rgba(198,244,255,0.75), rgba(134,229,255,0.25) 22%, transparent 58%)",
                 animationDelay: "-2s",
               }}
             />
@@ -218,8 +242,8 @@ export default function WorldScene({
         >
           <defs>
             <linearGradient id="midFill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#061527" />
-              <stop offset="100%" stopColor="#020a15" />
+              <stop offset="0%" stopColor="#0d243f" />
+              <stop offset="100%" stopColor="#06121f" />
             </linearGradient>
             <radialGradient id="midRim" cx={`${LIGHT_X}%`} cy="34%" r="40%">
               <stop offset="0%" stopColor="#b6ecff" stopOpacity="0.95" />
@@ -228,6 +252,20 @@ export default function WorldScene({
           </defs>
           <path d={MID.fill} fill="url(#midFill)" />
           <path d={MID.line} fill="none" stroke="url(#midRim)" strokeWidth="3.5" />
+          {SETTLEMENTS.map((s, i) => (
+            <g key={s.key}>
+              <rect x={s.x - s.w / 2} y={s.y - s.h} width={s.w} height={s.h} fill="#020a15" />
+              <rect
+                x={s.x - s.w / 2 + 4}
+                y={s.y - s.h + 5}
+                width="4"
+                height="5"
+                fill="#a9ecff"
+                opacity="0.75"
+                style={{ animation: `halo-breathe ${6 + (i % 4)}s ease-in-out ${i * 0.9}s infinite` }}
+              />
+            </g>
+          ))}
         </svg>
 
         {/* Valley mist */}
@@ -247,22 +285,22 @@ export default function WorldScene({
           style={depth(46)}
         >
           <defs>
-            <radialGradient id="nearRim" cx={`${LIGHT_X}%`} cy="28%" r="34%">
-              <stop offset="0%" stopColor="#7fd4ff" stopOpacity="0.55" />
+            <radialGradient id="nearRim" cx={`${LIGHT_X}%`} cy="28%" r="26%">
+              <stop offset="0%" stopColor="#7fd4ff" stopOpacity="0.4" />
               <stop offset="100%" stopColor="#7fd4ff" stopOpacity="0" />
             </radialGradient>
           </defs>
-          <path d={NEAR.fill} fill="#010810" />
-          <path d={NEAR.line} fill="none" stroke="url(#nearRim)" strokeWidth="4" />
+          <path d={NEAR.fill} fill="#050f1c" />
+          <path d={NEAR.line} fill="none" stroke="url(#nearRim)" strokeWidth="2.5" />
         </svg>
 
         <svg
-          className="absolute inset-x-0 bottom-0 h-[17%] w-full"
+          className="absolute inset-x-0 bottom-0 h-[15%] w-full"
           viewBox="0 0 1600 240"
           preserveAspectRatio="xMidYMax slice"
           style={depth(62)}
         >
-          <path d={TREES} fill="#00050c" />
+          <path d={TREES} fill="#01070f" />
         </svg>
 
         {/* Low mist, in front of the trees */}
@@ -309,7 +347,7 @@ export default function WorldScene({
           background: `radial-gradient(140% 105% at 50% 42%, transparent 42%, rgba(1,4,12,0.55) 78%, rgba(1,4,12,0.92) 100%)`,
         }}
       />
-      <div className="absolute inset-x-0 bottom-0 h-56 bg-gradient-to-b from-transparent to-abyss" />
+      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-abyss" />
     </div>
   );
 }

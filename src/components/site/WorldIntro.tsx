@@ -12,7 +12,7 @@ export default function WorldIntro() {
         className="pointer-events-none absolute inset-0 -z-10"
         style={{
           background:
-            "radial-gradient(70% 46% at 78% -6%, rgba(35,102,180,0.28), transparent 68%)",
+            "radial-gradient(80% 60% at 78% -28%, rgba(35,102,180,0.3), transparent 66%)",
         }}
       />
       <div aria-hidden className="block-grid pointer-events-none absolute inset-0 -z-10 opacity-[0.22]" />
@@ -45,8 +45,8 @@ export default function WorldIntro() {
           {intro.pillars.map((p, i) => (
             <Reveal key={p.key} delay={i * 0.09}>
               <div
-                className={`group relative h-full px-0 py-9 md:px-8 md:first:pl-0 ${
-                  i > 0 ? "border-t border-hair md:border-l md:border-t-0" : ""
+                className={`group relative h-full py-9 md:pr-8 ${
+                  i > 0 ? "border-t border-hair md:border-l md:border-t-0 md:pl-10" : ""
                 }`}
               >
                 {/* the hairline above each pillar catches light on hover */}

@@ -4,6 +4,7 @@ import { Calendar, Globe, Hammer, Shield, Sword, Users, type LucideIcon } from "
 import { useRef } from "react";
 import { SERVER_CONFIG } from "@/lib/config";
 import Reveal from "@/components/ui/Reveal";
+import Ridge from "@/components/ui/Ridge";
 
 const ICONS: Record<string, LucideIcon> = { Sword, Globe, Hammer, Calendar, Shield, Users };
 
@@ -23,12 +24,14 @@ function Panel({
   label,
   description,
   tall,
+  seed,
 }: {
   index: number;
   icon: string;
   label: string;
   description: string;
   tall: boolean;
+  seed: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const Icon = ICONS[icon] ?? Globe;
@@ -50,10 +53,33 @@ function Panel({
     >
       <div
         className={`slab-face relative flex h-full flex-col overflow-hidden p-7 sm:p-8 ${
-          tall ? "min-h-[19rem] lg:min-h-[26rem]" : "min-h-[15rem]"
+          tall ? "min-h-[17rem] lg:min-h-[23rem]" : "min-h-[13.5rem]"
         }`}
       >
         <div aria-hidden className="block-grid pointer-events-none absolute inset-0 opacity-[0.13]" />
+
+        {/* every panel gets its own patch of the same landscape */}
+        <Ridge
+          seed={seed}
+          className="bottom-0 h-[46%] opacity-80 transition-opacity duration-700 group-hover:opacity-100"
+          fill="#0d2a4e"
+          rim={0.35}
+          lightX={24}
+          height={150}
+          block={14}
+          amplitude={0.62}
+          base={0.94}
+          peaks={2.6}
+          octaves={2}
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-[58%]"
+          style={{
+            background:
+              "linear-gradient(to top, rgba(4,16,31,0.92) 26%, rgba(4,16,31,0.55) 60%, transparent 100%)",
+          }}
+        />
         {/* the panel is lit by wherever the cursor is */}
         <div
           aria-hidden
@@ -100,7 +126,7 @@ function Panel({
 
 export default function Experience() {
   return (
-    <section className="relative isolate overflow-hidden py-28 sm:py-36">
+    <section className="relative isolate overflow-hidden pb-20 pt-28 sm:pb-24 sm:pt-36">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10"
@@ -139,6 +165,7 @@ export default function Experience() {
                 label={f.label}
                 description={f.description}
                 tall={i === 0}
+                seed={1301 + i * 977}
               />
             </Reveal>
           ))}
