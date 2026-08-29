@@ -1,18 +1,20 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:is(.dark *));
+
 @theme {
-  --color-emerald-accent: #2dd4a0;
-  --color-emerald-dim: #1a9e78;
-  --color-emerald-glow: rgba(45, 212, 160, 0.15);
-  --color-surface-0: #0a0a0a;
-  --color-surface-1: #111111;
-  --color-surface-2: #1a1a1a;
-  --color-surface-3: #222222;
-  --color-surface-border: #2a2a2a;
-  --color-text-primary: #f0f0f0;
-  --color-text-secondary: #999999;
-  --color-text-muted: #666666;
-  --color-warm-accent: #c8a96e;
+  --color-cyan-accent: #38bdf8;
+  --color-cyan-dim: #0284c7;
+  --color-gold-accent: #facc15;
+  --color-gold-dim: #ca8a04;
+  --color-surface-0: #020617; /* Deepest ocean blue / near black */
+  --color-surface-1: #0f172a;
+  --color-surface-2: #1e293b;
+  --color-surface-3: #334155;
+  --color-surface-border: #1e293b;
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #64748b;
 
   --font-display: "VampireWars", sans-serif;
 }
@@ -39,7 +41,7 @@ body {
 }
 
 ::selection {
-  background-color: var(--color-emerald-accent);
+  background-color: var(--color-cyan-accent);
   color: var(--color-surface-0);
 }
 
@@ -98,4 +100,16 @@ body {
     transition-duration: 0.01ms !important;
   }
   html { scroll-behavior: auto; }
+}
+
+@theme inline {
+  --animate-ripple: ripple var(--duration,2s) ease calc(var(--i, 0)*.2s) infinite;
+  @keyframes ripple {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    }
+  50% {
+    transform: translate(-50%, -50%) scale(0.9);
+    }
+  }
 }

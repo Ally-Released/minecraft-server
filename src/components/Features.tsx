@@ -48,11 +48,11 @@ export default function Features() {
               <div
                 key={feature.label}
                 data-feature
-                className="opacity-0 group flex flex-col items-center text-center p-6 rounded-2xl bg-surface-1/50 border border-surface-border hover:border-emerald-accent/30 hover:bg-surface-2/50 transition-all duration-300 cursor-default"
+                className="opacity-0 group flex flex-col items-center text-center p-6 rounded-2xl bg-surface-1/50 border border-surface-border hover:border-cyan-accent/30 hover:bg-surface-2/50 transition-all duration-300 cursor-default"
                 style={{ animationDelay: `${i * 80}ms` }}
               >
-                <div className="w-12 h-12 rounded-xl bg-surface-2 flex items-center justify-center mb-4 group-hover:bg-emerald-accent/10 transition-colors duration-300">
-                  <Icon size={22} className="text-text-muted group-hover:text-emerald-accent transition-colors duration-300" />
+                <div className="w-12 h-12 rounded-xl bg-surface-2 flex items-center justify-center mb-4 group-hover:bg-cyan-accent/10 transition-colors duration-300">
+                  <Icon size={22} className="text-text-muted group-hover:text-cyan-accent transition-colors duration-300" />
                 </div>
                 <h3 className="text-sm font-bold text-text-primary mb-1">{feature.label}</h3>
                 <p className="text-xs text-text-muted leading-relaxed">{feature.description}</p>

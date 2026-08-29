@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { SERVER_CONFIG } from "@/lib/config";
+import Image from "next/image";
 
 const NAV_ITEMS = [
   { label: "Home", href: "#home" },
@@ -68,10 +69,15 @@ export default function Navbar() {
         {/* Logo */}
         <button
           onClick={() => scrollTo("#home")}
-          className="font-[family-name:var(--font-display)] text-lg tracking-widest text-text-primary uppercase shrink-0 hover:text-emerald-accent transition-colors"
+          className="flex items-center gap-3 shrink-0 group"
           aria-label={`${SERVER_CONFIG.name} - go to home`}
         >
-          {SERVER_CONFIG.name}
+          <div className="relative w-8 h-8 rounded border border-surface-border overflow-hidden shadow-[0_0_10px_rgba(56,189,248,0.2)] group-hover:shadow-[0_0_15px_rgba(56,189,248,0.5)] transition-all">
+            <img src="/assets/cn-logo.jpg" alt="Logo" className="w-full h-full object-cover" />
+          </div>
+          <span className="font-[family-name:var(--font-display)] text-lg tracking-widest text-text-primary uppercase group-hover:text-cyan-accent transition-colors hidden sm:block">
+            {SERVER_CONFIG.name}
+          </span>
         </button>
 
         {/* Desktop links */}
@@ -83,13 +89,13 @@ export default function Navbar() {
               role="menuitem"
               className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                 activeSection === item.href.slice(1)
-                  ? "text-emerald-accent"
+                  ? "text-cyan-accent"
                   : "text-text-secondary hover:text-text-primary hover:bg-surface-2/50"
               }`}
             >
               {item.label}
               {activeSection === item.href.slice(1) && (
-                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-emerald-accent" />
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-cyan-accent shadow-[0_0_8px_rgba(56,189,248,0.8)]" />
               )}
             </button>
           ))}
@@ -100,7 +106,7 @@ export default function Navbar() {
           href={SERVER_CONFIG.discord}
           target="_blank"
           rel="noopener noreferrer"
-          className="hidden md:flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-accent/10 border border-emerald-accent/20 text-emerald-accent text-sm font-semibold hover:bg-emerald-accent/20 transition-all"
+          className="hidden md:flex items-center gap-2 px-4 py-2 rounded-lg bg-gold-accent/10 border border-gold-accent/20 text-gold-accent text-sm font-semibold hover:bg-gold-accent/20 hover:shadow-[0_0_15px_rgba(250,204,21,0.2)] transition-all"
         >
           Join Discord
         </a>
@@ -130,7 +136,7 @@ export default function Navbar() {
             <button
               key={item.href}
               onClick={() => scrollTo(item.href)}
-              className="text-3xl font-[family-name:var(--font-heading)] font-bold text-text-primary hover:text-emerald-accent transition-colors animate-fade-in-up"
+              className="text-3xl font-[family-name:var(--font-heading)] font-bold text-text-primary hover:text-cyan-accent transition-colors animate-fade-in-up"
               style={{ animationDelay: `${i * 80}ms` }}
             >
               {item.label}
@@ -140,7 +146,7 @@ export default function Navbar() {
             href={SERVER_CONFIG.discord}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-4 px-8 py-3 rounded-xl bg-emerald-accent text-surface-0 font-bold text-lg animate-fade-in-up"
+            className="mt-4 px-8 py-3 rounded-xl bg-gradient-to-r from-gold-accent to-gold-dim text-surface-0 font-bold text-lg animate-fade-in-up shadow-[0_0_20px_rgba(250,204,21,0.3)]"
             style={{ animationDelay: `${NAV_ITEMS.length * 80}ms` }}
           >
             Join Discord

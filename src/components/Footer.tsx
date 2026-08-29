@@ -15,9 +15,14 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-start gap-12 mb-16">
           {/* Brand */}
           <div>
-            <span className="font-[family-name:var(--font-display)] text-xl tracking-widest text-text-primary uppercase block mb-2">
-              {SERVER_CONFIG.name}
-            </span>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="relative w-10 h-10 rounded border border-surface-border overflow-hidden shadow-[0_0_10px_rgba(56,189,248,0.2)]">
+                <img src="/assets/cn-logo.jpg" alt="Logo" className="w-full h-full object-cover" />
+              </div>
+              <span className="font-[family-name:var(--font-display)] text-2xl tracking-widest text-text-primary uppercase">
+                {SERVER_CONFIG.name}
+              </span>
+            </div>
             <p className="text-text-muted text-sm max-w-xs">
               {SERVER_CONFIG.description}
             </p>
@@ -33,7 +38,7 @@ export default function Footer() {
                 <a
                   key={link.href}
                   href={link.href}
-                  className="text-sm text-text-secondary hover:text-text-primary transition-colors"
+                  className="text-sm text-text-secondary hover:text-cyan-accent transition-colors"
                 >
                   {link.label}
                 </a>
@@ -48,7 +53,7 @@ export default function Footer() {
                 href={SERVER_CONFIG.discord}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm text-text-secondary hover:text-text-primary transition-colors"
+                className="text-sm text-text-secondary hover:text-cyan-accent transition-colors"
               >
                 Discord
               </a>
