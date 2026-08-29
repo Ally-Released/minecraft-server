@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SERVER_CONFIG } from "@/lib/config";
 import Discord from "@/components/site/Discord";
-import Reveal from "@/components/ui/Reveal";
-import Icon, { type IconName } from "@/components/ui/Icon";
 
 export const metadata: Metadata = {
   title: "Discord",
@@ -11,7 +9,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/discord" },
 };
 
-const BEFORE: { icon: IconName; title: string; body: string; href: string; cta: string }[] = [
+const BEFORE = [
   {
     icon: "chest",
     title: "Not joined the server yet?",
@@ -40,36 +38,27 @@ export default function DiscordPage() {
     <>
       <Discord standalone />
 
-      <section className="relative mx-auto max-w-[92rem] px-5 pb-28 sm:px-8">
-        <Reveal>
-          <div className="border-t border-hair pt-12">
-            <p className="eyebrow">Before you post</p>
-            <ul className="mt-8 grid gap-4 md:grid-cols-3">
-              {BEFORE.map((b) => (
-                <li key={b.title}>
-                  <Link
-                    href={b.href}
-                    className="group flex h-full flex-col border border-hair p-6 transition-colors duration-500 hover:border-steel"
-                  >
-                    <span className="slot grid h-10 w-10 place-items-center text-ice">
-                      <Icon name={b.icon} size={18} />
-                    </span>
-                    <h2 className="display-tight mt-5 text-[1.15rem] text-paper">{b.title}</h2>
-                    <p className="prose-lede mt-2.5 flex-1 text-[0.88rem]">{b.body}</p>
-                    <span className="hud mt-5 inline-flex items-center gap-2 text-[0.62rem] uppercase tracking-[0.2em] text-ink-2 transition-colors duration-300 group-hover:text-glow">
-                      {b.cta}
-                      <Icon
-                        name="arrow"
-                        size={13}
-                        className="transition-transform duration-500 group-hover:translate-x-1"
-                      />
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
+      <section className="border-t border-hair pb-24">
+        <div className="mx-auto max-w-[56rem] px-5 pt-20 sm:px-8">
+          <div className="mb-12">
+            <p className="eyebrow text-electric">Before you post</p>
           </div>
-        </Reveal>
+          
+          <ul className="space-y-10">
+            {BEFORE.map((b, i) => (
+              <li key={b.title} className="flex gap-6">
+                <span className="hud text-ink-3 pt-1">0{i + 1}</span>
+                <div>
+                  <h3 className="display-tight text-[1.2rem] text-white">{b.title}</h3>
+                  <p className="prose-lede mt-2 text-[1rem] leading-relaxed max-w-lg">{b.body}</p>
+                  <Link href={b.href} className="mt-3 inline-block font-mono text-[0.8rem] text-electric uppercase tracking-widest hover:text-white">
+                    {b.cta} →
+                  </Link>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
     </>
   );

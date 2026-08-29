@@ -2,16 +2,8 @@
 
 import { useState } from "react";
 import { RARITY, price, type Catalogue } from "@/lib/store";
-import Icon from "@/components/ui/Icon";
 import { Availability } from "./Bits";
 
-/**
- * The whole ladder on one screen.
- *
- * Six product pages nobody opens is worse UX than one table everybody reads —
- * this is the fastest way for a player to work out which tier is worth it.
- * Pin a column to keep a candidate rank lit while scanning the rows.
- */
 export default function RankComparison({ catalogue }: { catalogue: Catalogue }) {
   const [pinned, setPinned] = useState(
     Math.max(catalogue.ranks.findIndex((r) => r.badge), 0)
@@ -20,39 +12,39 @@ export default function RankComparison({ catalogue }: { catalogue: Catalogue }) 
   const groups = [...new Set(catalogue.compare.map((r) => r.group))];
 
   return (
-    <div className="scroll-x -mx-5 px-5 sm:mx-0 sm:px-0">
+    <div className="overflow-x-auto -mx-5 px-5 sm:mx-0 sm:px-0 scrollbar-hide">
       <table className="w-full min-w-[46rem] border-collapse text-left">
         <caption className="sr-only">
           {catalogue.name} rank comparison. Select a column to highlight a rank.
         </caption>
         <thead>
           <tr>
-            <th scope="col" className="sticky left-0 z-10 bg-abyss pb-4 pr-6 align-bottom">
-              <span className="eyebrow">Perk</span>
+            <th scope="col" className="sticky left-0 z-10 bg-background pb-4 pr-6 align-bottom border-b border-border">
+              <span className="eyebrow text-primary">Perk</span>
             </th>
             {catalogue.ranks.map((rank, i) => {
               const r = RARITY[rank.rarity];
               const on = i === pinned;
               return (
-                <th key={rank.id} scope="col" className="px-2 pb-4 align-bottom">
+                <th key={rank.id} scope="col" className="px-2 pb-4 align-bottom border-b border-border">
                   <button
                     type="button"
                     onClick={() => setPinned(i)}
                     aria-pressed={on}
-                    className="group flex w-full flex-col items-center gap-1.5"
+                    className="group flex w-full flex-col items-center gap-2"
                   >
                     <span
-                      className="h-1 w-full transition-opacity duration-300"
-                      style={{ background: r.accent, opacity: on ? 1 : 0.25 }}
+                      className="h-1.5 w-full rounded-full transition-opacity duration-200"
+                      style={{ background: r.accent, opacity: on ? 1 : 0.2 }}
                     />
                     <span
-                      className={`display-tight mt-1 text-[0.95rem] leading-none transition-colors duration-300 ${
-                        on ? "text-paper" : "text-ink-2 group-hover:text-ice"
+                      className={`display-tight mt-1 text-base leading-none transition-colors duration-200 ${
+                        on ? "text-foreground" : "text-muted-foreground group-hover:text-foreground"
                       }`}
                     >
                       {rank.name}
                     </span>
-                    <span className="hud text-[0.6rem] tracking-[0.14em] text-ink-3">
+                    <span className="hud text-[0.65rem] tracking-widest text-muted-foreground">
                       {price(rank.price)}
                     </span>
                   </button>
@@ -68,9 +60,9 @@ export default function RankComparison({ catalogue }: { catalogue: Catalogue }) 
               <th
                 scope="colgroup"
                 colSpan={catalogue.ranks.length + 1}
-                className="sticky left-0 bg-abyss pb-2 pt-7 text-left"
+                className="sticky left-0 bg-background pb-3 pt-8 text-left"
               >
-                <span className="hud text-[0.58rem] uppercase tracking-[0.3em] text-steel">
+                <span className="hud text-[0.65rem] uppercase tracking-widest text-muted-foreground">
                   {group}
                 </span>
               </th>
@@ -78,14 +70,13 @@ export default function RankComparison({ catalogue }: { catalogue: Catalogue }) 
             {catalogue.compare
               .filter((row) => row.group === group)
               .map((row) => (
-                <tr key={row.label} className="border-t border-hair/60">
+                <tr key={row.label} className="border-t border-border/50">
                   <th
                     scope="row"
-                    className="sticky left-0 z-10 bg-abyss py-3 pr-6 text-left font-normal"
+                    className="sticky left-0 z-10 bg-background py-4 pr-6 text-left font-normal"
                   >
                     <span className="flex items-center gap-3">
-                      <Icon name={row.icon} size={15} className="shrink-0 text-steel" />
-                      <span className="whitespace-nowrap text-[0.86rem] text-ink-2">
+                      <span className="whitespace-nowrap text-sm text-muted-foreground">
                         {row.label}
                       </span>
                     </span>
@@ -96,29 +87,29 @@ export default function RankComparison({ catalogue }: { catalogue: Catalogue }) 
                     return (
                       <td
                         key={i}
-                        className="px-2 py-3 text-center transition-colors duration-300"
+                        className="px-2 py-4 text-center transition-colors duration-200"
                         style={{
                           background: on
-                            ? `color-mix(in srgb, ${r.accent} 8%, transparent)`
+                            ? `color-mix(in srgb, ${r.accent} 10%, transparent)`
                             : undefined,
                         }}
                       >
                         {value === true ? (
                           <span className="inline-flex justify-center">
-                            <Availability on accent={on ? r.accent : "var(--color-ice)"} />
+                            <Availability on accent={on ? r.accent : "currentColor"} />
                           </span>
                         ) : value === null ? (
                           <span className="inline-flex justify-center">
                             <Availability on={false} />
                           </span>
                         ) : typeof value === "string" && value.startsWith("/") ? (
-                          <code className="hud whitespace-nowrap text-[0.72rem] text-ice">
+                          <code className="hud whitespace-nowrap text-xs text-muted-foreground">
                             {value}
                           </code>
                         ) : (
                           <span
-                            className="display-tight text-[1.05rem] leading-none"
-                            style={{ color: on ? r.accent : "var(--color-paper)" }}
+                            className="display-tight text-base leading-none"
+                            style={{ color: on ? r.accent : "currentColor" }}
                           >
                             {value}
                           </span>

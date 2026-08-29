@@ -26,21 +26,12 @@ export default async function PvpCategoryPage({ params }: Params) {
   if (!cat) notFound();
 
   return (
-    <div className="bg-[#01060f]">
-      <header className="relative isolate overflow-hidden border-b border-hair pb-12 pt-36 sm:pt-44">
-        <div aria-hidden className="arena-grid pointer-events-none absolute inset-0" />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background: `radial-gradient(52% 62% at 80% 100%, color-mix(in srgb, ${cat.accent} 26%, transparent), transparent 70%)`,
-          }}
-        />
-
-        <div className="relative mx-auto max-w-[92rem] px-5 sm:px-8">
+    <div className="bg-background min-h-screen">
+      <header className="relative isolate overflow-hidden border-b border-border pb-12 pt-36 sm:pt-44">
+        <div className="relative container-base max-w-5xl">
           <Link
             href="/pvp"
-            className="hud inline-flex items-center gap-2 text-[0.62rem] uppercase tracking-[0.24em] text-ink-3 transition-colors hover:text-ice"
+            className="hud inline-flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground transition-colors hover:text-foreground"
           >
             <Icon name="arrow" size={13} className="rotate-180" />
             All duel types
@@ -48,17 +39,17 @@ export default async function PvpCategoryPage({ params }: Params) {
 
           <div className="mt-7 flex flex-wrap items-end justify-between gap-6">
             <div>
-              <span className="eyebrow">{cat.eyebrow}</span>
-              <h1 className="display mt-4 text-[clamp(2.4rem,7vw,5rem)] leading-[0.86] text-paper">
+              <span className="eyebrow text-primary">{cat.eyebrow}</span>
+              <h1 className="display mt-4 text-5xl md:text-6xl text-foreground">
                 {cat.name}
               </h1>
             </div>
-            <p className="prose-lede max-w-md text-[0.98rem]">{cat.blurb}</p>
+            <p className="prose-lede max-w-md text-base text-muted-foreground">{cat.blurb}</p>
           </div>
         </div>
       </header>
 
-      <section className="relative mx-auto max-w-[92rem] px-5 pb-28 pt-12 sm:px-8">
+      <section className="relative container-base max-w-5xl pb-28 pt-12">
         <PvpSelector category={cat} />
       </section>
     </div>

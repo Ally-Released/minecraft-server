@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import { SERVER_CONFIG } from "@/lib/config";
 import HowToPlay from "@/components/site/HowToPlay";
-import Ridge from "@/components/ui/Ridge";
-import Reveal from "@/components/ui/Reveal";
-import Action from "@/components/ui/Action";
-import Icon, { type IconName } from "@/components/ui/Icon";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "How to play",
@@ -12,7 +10,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/how-to-play" },
 };
 
-const TROUBLE: { icon: IconName; title: string; body: string }[] = [
+const TROUBLE = [
   {
     icon: "server",
     title: "Connection timed out",
@@ -32,50 +30,40 @@ const TROUBLE: { icon: IconName; title: string; body: string }[] = [
 
 export default function HowToPlayPage() {
   return (
-    <>
+    <div className="bg-background min-h-screen">
       <HowToPlay standalone />
 
-      <section className="relative isolate overflow-hidden pb-28">
-        <Ridge seed={4820} className="top-0 h-24 rotate-180 opacity-40" height={130} block={14} rim={0.2} />
-        <div className="mx-auto max-w-[92rem] px-5 pt-24 sm:px-8">
-          <Reveal>
-            <div className="grid gap-x-12 gap-y-8 lg:grid-cols-12">
-              <div className="lg:col-span-4">
-                <p className="eyebrow">If it does not work</p>
-                <h2 className="display mt-5 text-[clamp(1.9rem,4vw,3rem)] text-paper">
-                  Three things it usually is
-                </h2>
-              </div>
-              <ul className="grid gap-8 sm:grid-cols-3 lg:col-span-8">
-                {TROUBLE.map((t) => (
-                  <li key={t.title}>
-                    <span className="slot grid h-10 w-10 place-items-center text-ice">
-                      <Icon name={t.icon} size={18} />
-                    </span>
-                    <h3 className="display-tight mt-4 text-[1.05rem] text-paper">{t.title}</h3>
-                    <p className="prose-lede mt-2 text-[0.86rem]">{t.body}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Reveal>
+      <section className="border-t border-border pb-24 bg-card">
+        <div className="container-base max-w-3xl pt-20">
+          <div className="mb-12">
+            <p className="eyebrow text-primary">If it does not work</p>
+            <h2 className="display mt-4 text-3xl sm:text-4xl text-foreground">
+              Three things it usually is
+            </h2>
+          </div>
+          
+          <ul className="space-y-10">
+            {TROUBLE.map((t, i) => (
+              <li key={t.title} className="flex gap-6 sm:gap-8">
+                <span className="hud text-muted-foreground pt-1 text-sm font-semibold">0{i + 1}</span>
+                <div>
+                  <h3 className="display-tight text-xl text-foreground">{t.title}</h3>
+                  <p className="prose-lede mt-2 text-base leading-relaxed text-muted-foreground">{t.body}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
 
-          <Reveal delay={0.1}>
-            <div className="mt-16 flex flex-wrap items-center gap-4 border-t border-hair pt-10">
-              <p className="display-tight mr-auto text-[1.5rem] text-ink">Once you are in</p>
-              <Action variant="ghost" href="/rules">
-                <span className="text-[0.78rem]">Read the rules</span>
-              </Action>
-              <Action variant="ghost" href="/modes">
-                <span className="text-[0.78rem]">Pick a world</span>
-              </Action>
-              <Action variant="discord" href={SERVER_CONFIG.discord} external>
-                <span className="text-[0.78rem]">Say hello</span>
-              </Action>
-            </div>
-          </Reveal>
+          <div className="mt-20 flex flex-wrap items-center gap-4 border-t border-border pt-12">
+            <Button asChild variant="outline">
+              <Link href="/rules">Read the rules</Link>
+            </Button>
+            <Button asChild variant="secondary">
+              <Link href="/modes">Pick a world</Link>
+            </Button>
+          </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }

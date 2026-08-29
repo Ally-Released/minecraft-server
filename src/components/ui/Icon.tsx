@@ -29,8 +29,9 @@ const ICONS = {
   ),
   axe: (
     <>
-      <path d="M10 2h4v20h-4z" />
-      <path d="M2 3h8v11H6L2 10z" />
+      <path d="M10 1h4v22h-4z" />
+      {/* a blade hung off the haft, not a rectangle — otherwise it reads as a flag */}
+      <path d="M10 2L1 6v6l9 4z" />
     </>
   ),
   mace: (
@@ -70,8 +71,8 @@ const ICONS = {
   ),
   fireball: (
     <>
-      <path d="M12 1c1 5-2 6-2 9 0 1 1 2 1 2s-3 1-3 5a6 6 0 0 0 12 0c0-6-5-9-8-16z" />
-      <path d="M12 13c2 2 3 3 3 5a3 3 0 0 1-6 0c0-2 1-3 3-5z" fill={CUT} />
+      <path d="M13 1c0 3-1 4-2 6-1-1-2-1-2-3-3 3-4 5-4 8a7 7 0 0 0 14 0c0-4-3-7-6-11z" />
+      <path d="M12 14c1.6 1.6 2.6 2.6 2.6 4.1a2.6 2.6 0 0 1-5.2 0c0-1.5 1-2.5 2.6-4.1z" fill={CUT} />
     </>
   ),
   pvp: (

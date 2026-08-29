@@ -33,26 +33,6 @@ export type Mode = {
 
 export const MODES: Mode[] = [
   {
-    slug: "lifesteal",
-    name: "Lifesteal",
-    tagline: "Every heart you take is a heart you keep.",
-    description:
-      "Lifesteal turns the health bar into currency. Land the killing blow and you take a heart from your opponent permanently; lose your last one and you are out of the world until you find a way back in. It makes every fight a decision rather than a reflex — the players with the longest health bars are the ones who picked their fights well.",
-    icon: "heart",
-    accent: "#6f6cf5",
-    traits: [
-      { icon: "heart", label: "Stakes", value: "Hearts transfer on kill" },
-      { icon: "pvp", label: "Combat", value: "Always enabled" },
-      { icon: "world", label: "World", value: "Shared, persistent" },
-    ],
-    highlights: [
-      "Kills take a heart from the loser and give it to the winner",
-      "Run out of hearts and you lose access until you recover one",
-      "Alliances matter more than aim",
-    ],
-    players: null,
-  },
-  {
     slug: "survival",
     name: "Survival",
     tagline: "Build something that outlasts you.",
@@ -111,6 +91,26 @@ export const MODES: Mode[] = [
       "Sword, axe, crystal, ranged, mace and objective duels",
       "Kits handed to you — nothing to farm",
       "Free-for-all arenas when you want chaos instead",
+    ],
+    players: null,
+  },
+  {
+    slug: "lifesteal",
+    name: "Lifesteal",
+    tagline: "Every heart you take is a heart you keep.",
+    description:
+      "Lifesteal turns the health bar into currency. Land the killing blow and you take a heart from your opponent permanently; lose your last one and you are out of the world until you find a way back in. It makes every fight a decision rather than a reflex — the players with the longest health bars are the ones who picked their fights well.",
+    icon: "heart",
+    accent: "#6f6cf5",
+    traits: [
+      { icon: "heart", label: "Stakes", value: "Hearts transfer on kill" },
+      { icon: "pvp", label: "Combat", value: "Always enabled" },
+      { icon: "world", label: "World", value: "Shared, persistent" },
+    ],
+    highlights: [
+      "Kills take a heart from the loser and give it to the winner",
+      "Run out of hearts and you lose access until you recover one",
+      "Alliances matter more than aim",
     ],
     players: null,
   },

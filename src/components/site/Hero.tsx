@@ -1,123 +1,60 @@
 "use client";
 
-import { motion } from "motion/react";
 import { SERVER_CONFIG } from "@/lib/config";
 import type { ServerStatus } from "@/lib/status";
+import { useLiveStatus } from "@/lib/useLiveStatus";
 import WorldScene from "@/components/scene/WorldScene";
-import Action from "@/components/ui/Action";
+import { Button } from "@/components/ui/button";
 import CopyIp from "@/components/ui/CopyIp";
-import StatusStrip from "./StatusStrip";
+import Link from "next/link";
 
-const EASE = [0.16, 1, 0.3, 1] as const;
+export default function Hero({ status: initialStatus }: { status: ServerStatus }) {
+  const status = useLiveStatus(initialStatus);
+  const online = status.state === "online";
 
-/** Lines wipe up from behind a mask — key art, not a fade-in. */
-function Line({ text, delay, lit }: { text: string; delay: number; lit?: boolean }) {
   return (
-    <span className="block overflow-hidden pb-[0.06em]">
-      <motion.span
-        className={`block ${lit ? "lit" : "text-paper"}`}
-        initial={{ y: "108%" }}
-        animate={{ y: "0%" }}
-        transition={{ duration: 1.05, delay, ease: EASE }}
-      >
-        {text}
-      </motion.span>
-    </span>
-  );
-}
-
-export default function Hero({ status }: { status: ServerStatus }) {
-  return (
-    <section id="home" className="relative isolate min-h-svh overflow-hidden">
+    <section id="home" className="relative isolate min-h-[90svh] overflow-hidden bg-background">
       <WorldScene />
 
-      <div className="relative z-10 mx-auto flex min-h-svh max-w-[88rem] flex-col justify-end px-5 pb-20 pt-32 sm:px-8 lg:pb-28">
-        <div className="grid items-end gap-12 lg:grid-cols-12">
-          {/* ── Key art ─────────────────────────────────────── */}
-          <div className="lg:col-span-7">
-            <motion.div
-              initial={{ opacity: 0, x: -12 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.9, delay: 0.15, ease: EASE }}
-              className="mb-7 flex items-center gap-3"
-            >
-              <span aria-hidden className="h-px w-9 bg-gradient-to-r from-glow to-transparent" />
-              <span className="eyebrow text-ice/80 max-sm:tracking-[0.18em]">
-                {SERVER_CONFIG.hero.eyebrow}
-              </span>
-            </motion.div>
-
-            <h1 className="display text-[clamp(2.5rem,7.4vw,7rem)]">
-              {SERVER_CONFIG.hero.headline.map((line, i) => (
-                <Line
-                  key={line}
-                  text={line}
-                  delay={0.25 + i * 0.11}
-                  lit={i === SERVER_CONFIG.hero.headline.length - 1}
-                />
-              ))}
-            </h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: 0.7, ease: EASE }}
-              className="prose-lede mt-7 max-w-md text-[1.05rem] sm:text-lg"
-            >
-              {SERVER_CONFIG.description}
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: 0.82, ease: EASE }}
-              className="mt-10 flex flex-wrap items-center gap-3"
-            >
-              <Action variant="primary" href="/how-to-play">
-                Play Now
-              </Action>
-              <Action variant="ghost" href={SERVER_CONFIG.discord} external>
-                Join Discord
-              </Action>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: 0.94, ease: EASE }}
-              className="mt-6 max-w-lg"
-            >
-              <CopyIp />
-            </motion.div>
+      <div className="relative z-10 container-base flex min-h-[90svh] flex-col justify-end pb-20 pt-32 lg:pb-28">
+        <div className="max-w-3xl">
+          <div className="mb-7 flex items-center gap-3">
+            <span aria-hidden className="h-px w-9 bg-electric/50" />
+            <span className="eyebrow text-electric tracking-[0.25em]">
+              {SERVER_CONFIG.hero.eyebrow}
+            </span>
           </div>
 
-          {/* ── Instrument ──────────────────────────────────── */}
-          <motion.div
-            initial={{ opacity: 0, y: 22 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1.05, ease: EASE }}
-            className="lg:col-span-5 lg:justify-self-end"
-          >
-            <StatusStrip initial={status} />
-          </motion.div>
+          <h1 className="display text-[clamp(2.5rem,7.4vw,6.5rem)] text-white">
+            {SERVER_CONFIG.hero.headline.join(" ")}
+          </h1>
+
+          <p className="prose-lede mt-7 max-w-lg text-[1.05rem] text-ink-2 sm:text-lg">
+            {SERVER_CONFIG.description}
+          </p>
+
+          <div className="mt-10 flex flex-wrap items-center gap-4">
+            <Button asChild size="lg" className="px-8 py-6 text-sm tracking-wider font-semibold rounded-none slab slab-sm bg-white text-abyss hover:bg-white/90">
+              <Link href="/how-to-play">Play Now</Link>
+            </Button>
+            <Button asChild variant="outline" size="lg" className="px-8 py-6 text-sm tracking-wider font-semibold rounded-none">
+              <a href={SERVER_CONFIG.discord} target="_blank" rel="noopener noreferrer">
+                Join Discord
+              </a>
+            </Button>
+          </div>
+
+          <div className="mt-8 max-w-sm">
+            <CopyIp />
+            <div className="mt-3 flex items-center gap-2 pl-1">
+              <span className={`h-1.5 w-1.5 rounded-full ${online ? "bg-electric" : "bg-ink-3"}`} />
+              <span className="hud text-[0.65rem] tracking-[0.1em] text-ink-3 uppercase">
+                {online ? `${status.players?.online || 0} Online · Java + Bedrock` : "Offline"}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
-
-      {/* ── Scroll hint ───────────────────────────────────── */}
-      <motion.div
-        aria-hidden
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1.5 }}
-        className="absolute inset-x-0 bottom-6 z-10 hidden justify-center lg:flex"
-      >
-        <span className="flex flex-col items-center gap-2">
-          <span className="hud text-[0.55rem] uppercase tracking-[0.4em] text-ink-3">Scroll</span>
-          <span className="relative h-9 w-px bg-gradient-to-b from-transparent via-steel to-transparent">
-            <span className="animate-hint absolute left-1/2 top-0 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-glow shadow-[0_0_10px_2px_rgba(134,229,255,0.6)]" />
-          </span>
-        </span>
-      </motion.div>
     </section>
   );
 }

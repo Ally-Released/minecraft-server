@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import { catalogue, price } from "@/lib/store";
-import PageHeader from "@/components/site/PageHeader";
-import Reveal from "@/components/ui/Reveal";
 import RankComparison from "@/components/store/RankComparison";
 import RankExperience from "@/components/store/RankExperience";
-import StoreSidebar from "@/components/store/StoreSidebar";
 
 const CAT = catalogue("survival")!;
 
@@ -16,68 +13,60 @@ export const metadata: Metadata = {
 
 export default function SurvivalStorePage() {
   return (
-    <>
-      <PageHeader
-        eyebrow="Survival · Ranks & progression"
-        title={
-          <>
-            Survival <span className="lit">ranks</span>
-          </>
-        }
-        lede={CAT.blurb}
-        accent={CAT.accent}
-        seed={3391}
-        aside={
-          <dl className="slot p-6">
+    <div className="bg-background min-h-screen">
+      <section className="relative isolate overflow-hidden pt-32 pb-12">
+        <div className="container-base max-w-5xl">
+          <div className="flex items-center gap-3 mb-6">
+            <span aria-hidden className="h-px w-9" style={{ backgroundColor: CAT.accent }} />
+            <span className="eyebrow" style={{ color: CAT.accent }}>Survival · Ranks & progression</span>
+          </div>
+          <h1 className="display text-5xl md:text-6xl text-foreground">
+            Survival ranks
+          </h1>
+          <p className="prose-lede mt-5 max-w-lg text-base text-muted-foreground">
+            {CAT.blurb}
+          </p>
+
+          <dl className="mt-10 flex gap-8 border-l border-border pl-6">
             {[
               ["Tiers", `${CAT.ranks.length}`],
               ["From", price(CAT.ranks[0].price)],
               ["Top tier", CAT.ranks[CAT.ranks.length - 1].name],
               ["Homes", "2 → 15"],
             ].map(([k, v]) => (
-              <div key={k} className="flex items-baseline justify-between gap-4 py-1.5">
-                <dt className="hud text-[0.58rem] uppercase tracking-[0.22em] text-ink-3">{k}</dt>
-                <dd className="display-tight text-[1.05rem] text-paper">{v}</dd>
+              <div key={k}>
+                <dt className="hud text-xs uppercase tracking-widest text-muted-foreground">{k}</dt>
+                <dd className="display-tight mt-2 text-lg text-foreground">{v}</dd>
               </div>
             ))}
           </dl>
-        }
-      />
+        </div>
+      </section>
 
-      <div className="mx-auto max-w-[92rem] px-5 pb-28 sm:px-8">
-        <div className="grid gap-x-10 gap-y-12 lg:grid-cols-12">
-          <aside className="lg:col-span-2">
-            <StoreSidebar />
-          </aside>
+      <div className="container-base max-w-5xl pb-28 border-t border-border pt-12">
+        <div className="min-w-0">
+          <section id="ranks" className="scroll-mt-28">
+            <RankExperience catalogue={CAT} layout="grid" />
+          </section>
 
-          <div className="lg:col-span-10">
-            <section id="ranks" className="scroll-mt-28">
-              <RankExperience catalogue={CAT} layout="rail" />
-            </section>
-
-            <section id="compare" className="mt-24 scroll-mt-28">
-              <Reveal>
-                <div className="flex flex-wrap items-end justify-between gap-6 border-b border-hair pb-6">
-                  <div>
-                    <p className="eyebrow">Side by side</p>
-                    <h2 className="display mt-4 text-[clamp(1.9rem,4vw,3rem)] text-paper">
-                      Every tier, one screen
-                    </h2>
-                  </div>
-                  <p className="prose-lede max-w-sm text-[0.9rem]">
-                    Select a column to keep a rank highlighted while you scan the rows.
-                  </p>
-                </div>
-              </Reveal>
-              <Reveal delay={0.08}>
-                <div className="mt-10">
-                  <RankComparison catalogue={CAT} />
-                </div>
-              </Reveal>
-            </section>
-          </div>
+          <section id="compare" className="mt-24 scroll-mt-28">
+            <div className="flex flex-wrap items-end justify-between gap-6 border-b border-border pb-6">
+              <div>
+                <p className="eyebrow text-primary">Side by side</p>
+                <h2 className="display mt-4 text-4xl text-foreground">
+                  Every tier, one screen
+                </h2>
+              </div>
+              <p className="prose-lede max-w-sm text-sm text-muted-foreground">
+                Select a column to keep a rank highlighted while you scan the rows.
+              </p>
+            </div>
+            <div className="mt-10">
+              <RankComparison catalogue={CAT} />
+            </div>
+          </section>
         </div>
       </div>
-    </>
+    </div>
   );
 }

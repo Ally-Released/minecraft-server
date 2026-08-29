@@ -3,8 +3,8 @@ import Link from "next/link";
 import { SERVER_CONFIG } from "@/lib/config";
 import { PVP_CATEGORIES, PVP_MODE_COUNT, DIFFICULTY_LABEL } from "@/lib/pvp";
 import Icon from "@/components/ui/Icon";
-import Reveal from "@/components/ui/Reveal";
 import { Meter } from "@/components/store/Bits";
+import { Card, CardContent } from "@/components/ui/card";
 
 export const metadata: Metadata = {
   title: "PvP practice",
@@ -14,124 +14,103 @@ export const metadata: Metadata = {
 
 export default function PvpHubPage() {
   return (
-    <div className="relative">
-      <header className="relative isolate overflow-hidden border-b border-hair bg-[#01060f] pb-14 pt-36 sm:pt-44">
-        <div aria-hidden className="arena-grid pointer-events-none absolute inset-0" />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background: "radial-gradient(50% 60% at 78% 100%, rgba(85,214,255,0.26), transparent 70%)",
-          }}
-        />
-
-        <div className="relative mx-auto max-w-[92rem] px-5 sm:px-8">
+    <div className="relative bg-background min-h-screen">
+      <header className="relative isolate overflow-hidden border-b border-border pb-14 pt-36 sm:pt-44">
+        <div className="relative container-base max-w-5xl">
           <div className="flex items-center gap-3">
-            <Icon name="sword" size={15} className="text-glow" />
-            <span className="eyebrow">PvP practice</span>
+            <Icon name="sword" size={15} className="text-primary" />
+            <span className="eyebrow text-primary">PvP practice</span>
           </div>
-          <h1 className="display mt-6 text-[clamp(2.8rem,8vw,6.4rem)] leading-[0.84] text-paper">
+          <h1 className="display mt-6 text-5xl sm:text-6xl text-foreground">
             Pick a fight.
-            <span className="block text-ice/85">There are {PVP_MODE_COUNT} of them.</span>
+            <span className="block text-muted-foreground mt-2">There are {PVP_MODE_COUNT} of them.</span>
           </h1>
 
           <div className="mt-9 grid gap-8 lg:grid-cols-12 lg:items-end">
-            <p className="prose-lede text-[1.05rem] lg:col-span-5">
+            <p className="prose-lede text-base lg:col-span-6">
               Kits are handed to you. Arenas are instant. Nothing you lose here costs you anything,
               which is the entire point of a practice server.
             </p>
-            <dl className="grid grid-cols-3 gap-px border border-hair bg-hair lg:col-span-5 lg:col-start-8">
+            <div className="grid grid-cols-3 gap-px border border-border bg-border rounded-lg overflow-hidden lg:col-span-5 lg:col-start-8">
               {[
                 ["Categories", String(PVP_CATEGORIES.length)],
                 ["Duel types", String(PVP_MODE_COUNT)],
                 ["Kits", "Provided"],
               ].map(([k, v]) => (
-                <div key={k} className="bg-[#01060f] px-4 py-4">
-                  <dt className="hud text-[0.52rem] uppercase tracking-[0.22em] text-ink-3">{k}</dt>
-                  <dd className="display-tight mt-2 text-[1.3rem] text-paper">{v}</dd>
+                <div key={k} className="bg-card px-4 py-4">
+                  <dt className="hud text-[0.6rem] uppercase tracking-widest text-muted-foreground">{k}</dt>
+                  <dd className="display-tight mt-2 text-xl text-foreground">{v}</dd>
                 </div>
               ))}
-            </dl>
+            </div>
           </div>
         </div>
       </header>
 
-      <section className="relative mx-auto max-w-[92rem] px-5 pb-28 pt-14 sm:px-8">
-        <ul className="space-y-3">
+      <section className="relative container-base max-w-5xl pb-28 pt-14">
+        <ul className="space-y-4">
           {PVP_CATEGORIES.map((cat, i) => (
-            <Reveal key={cat.slug} delay={i * 0.05}>
-              <li>
-                <Link
-                  href={`/pvp/${cat.slug}`}
-                  className="group relative block overflow-hidden border border-hair transition-colors duration-500 hover:border-steel"
-                >
-                  <span
-                    aria-hidden
-                    className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100"
-                    style={{
-                      background: `radial-gradient(50% 130% at 8% 50%, color-mix(in srgb, ${cat.accent} 22%, transparent), transparent 70%)`,
-                    }}
-                  />
-
-                  <span className="relative grid items-center gap-x-8 gap-y-5 p-6 lg:grid-cols-12 lg:p-7">
-                    <span className="flex items-center gap-4 lg:col-span-4">
+            <li key={cat.slug}>
+              <Link
+                href={`/pvp/${cat.slug}`}
+                className="group block"
+              >
+                <Card className="transition-all duration-200 hover:border-primary/50 hover:bg-card/80">
+                  <CardContent className="p-6 sm:p-8 flex flex-col lg:flex-row items-start lg:items-center gap-6 lg:gap-8">
+                    <div className="flex items-center gap-5 w-full lg:w-1/3 shrink-0">
                       <span
-                        className="slot grid h-14 w-14 shrink-0 place-items-center transition-transform duration-500 group-hover:scale-105"
-                        style={{ ["--slot-accent" as string]: cat.accent, color: cat.accent }}
+                        className="grid h-14 w-14 shrink-0 place-items-center rounded bg-background border border-border transition-colors group-hover:border-primary/30"
+                        style={{ color: cat.accent }}
                       >
                         <Icon name={cat.icon} size={24} />
                       </span>
-                      <span className="min-w-0">
-                        <span className="hud block text-[0.52rem] uppercase tracking-[0.26em] text-ink-3">
+                      <div className="min-w-0">
+                        <span className="hud block text-[0.6rem] uppercase tracking-widest text-muted-foreground">
                           {cat.eyebrow}
                         </span>
-                        <span className="display mt-1.5 block text-[1.8rem] leading-none text-paper">
+                        <span className="display-tight mt-1.5 block text-2xl text-foreground">
                           {cat.name}
                         </span>
-                      </span>
-                    </span>
+                      </div>
+                    </div>
 
-                    <span className="lg:col-span-6">
-                      <span className="flex flex-wrap gap-1.5">
-                        {cat.modes.map((mode) => (
-                          <span
-                            key={mode.id}
-                            className="hud border border-hair px-2.5 py-1 text-[0.66rem] text-ink-2 transition-colors duration-500 group-hover:border-steel/70 group-hover:text-ice"
-                          >
-                            {mode.name}
-                          </span>
-                        ))}
-                      </span>
-                    </span>
+                    <div className="flex-1 flex flex-wrap gap-2">
+                      {cat.modes.map((mode) => (
+                        <span
+                          key={mode.id}
+                          className="hud rounded-full border border-border bg-background px-3 py-1 text-[0.65rem] text-muted-foreground transition-colors duration-200 group-hover:border-primary/30 group-hover:text-foreground"
+                        >
+                          {mode.name}
+                        </span>
+                      ))}
+                    </div>
 
-                    <span className="flex items-center gap-4 lg:col-span-2 lg:justify-end">
-                      <span className="hud text-[0.58rem] uppercase tracking-[0.2em] text-ink-3">
+                    <div className="flex items-center gap-4 w-full lg:w-auto lg:justify-end shrink-0 pt-4 lg:pt-0 border-t lg:border-t-0 border-border lg:border-none mt-2 lg:mt-0">
+                      <span className="hud text-[0.65rem] uppercase tracking-widest text-muted-foreground">
                         {cat.modes.length} modes
                       </span>
                       <Icon
                         name="arrow"
                         size={16}
-                        className="shrink-0 text-steel transition-all duration-500 group-hover:translate-x-1 group-hover:text-glow"
+                        className="shrink-0 text-muted-foreground transition-transform duration-200 group-hover:translate-x-1 group-hover:text-primary"
                       />
-                    </span>
-                  </span>
-                </Link>
-              </li>
-            </Reveal>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            </li>
           ))}
         </ul>
 
-        <Reveal>
-          <div className="mt-16 flex flex-wrap items-center gap-x-10 gap-y-4 border-t border-hair pt-8">
-            <p className="eyebrow">Difficulty scale</p>
-            {([1, 2, 3, 4] as const).map((d) => (
-              <span key={d} className="flex items-center gap-3">
-                <Meter level={d} />
-                <span className="hud text-[0.66rem] text-ink-2">{DIFFICULTY_LABEL[d]}</span>
-              </span>
-            ))}
-          </div>
-        </Reveal>
+        <div className="mt-16 flex flex-wrap items-center gap-x-10 gap-y-4 border-t border-border pt-8">
+          <p className="eyebrow text-primary">Difficulty scale</p>
+          {([1, 2, 3, 4] as const).map((d) => (
+            <span key={d} className="flex items-center gap-3">
+              <Meter level={d} />
+              <span className="hud text-xs tracking-wider text-muted-foreground">{DIFFICULTY_LABEL[d]}</span>
+            </span>
+          ))}
+        </div>
       </section>
     </div>
   );

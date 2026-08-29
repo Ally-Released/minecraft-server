@@ -1,22 +1,14 @@
 @import "tailwindcss";
 
 /* ══════════════════════════════════════════════════════════════
-   CLASHER NETWORK — BLUE LIGHTING SYSTEM
+   CLASHER NETWORK — MINIMAL BLUE SYSTEM
 
-   Colour is treated as light, not decoration. There is one light
-   source in this world (the beacon in the hero) and every surface
-   downstream is lit by it:
-
-     abyss / void   → unlit space, the dominant value
-     navy / deep    → surfaces catching ambient sky light
-     steel          → edges turned toward the light
-     azure          → primary interaction
-     electric       → active / focused interaction
-     glow           → raw energy, used sparingly
-     ice / paper    → information the eye must land on
-
-   Cyan is a highlight, never a fill. White carries meaning.
+   Colour is treated as light, not decoration. The majority of the
+   site remains dark/abyss, with blue acting as a rare, specific
+   accent for interactivity and importance.
    ══════════════════════════════════════════════════════════════ */
+
+@custom-variant dark (&:is(.dark *));
 
 @theme {
   --color-abyss: #01040c;
@@ -39,52 +31,94 @@
   --font-sans: var(--font-inter), system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, monospace;
 
-  /* Motion — one easing family, used everywhere */
+  /* Motion */
   --ease-out-quart: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Shadcn UI Variables */
+  --color-background: var(--color-abyss);
+  --color-foreground: var(--color-ink);
+
+  --color-card: var(--color-void);
+  --color-card-foreground: var(--color-ink);
+
+  --color-popover: var(--color-void);
+  --color-popover-foreground: var(--color-ink);
+
+  --color-primary: var(--color-electric);
+  --color-primary-foreground: var(--color-abyss);
+
+  --color-secondary: var(--color-navy);
+  --color-secondary-foreground: var(--color-paper);
+
+  --color-muted: var(--color-void);
+  --color-muted-foreground: var(--color-ink-3);
+
+  --color-accent: var(--color-navy);
+  --color-accent-foreground: var(--color-paper);
+
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #f8fafc;
+
+  --color-border: var(--color-hair);
+  --color-input: var(--color-hair);
+  --color-ring: var(--color-steel);
+
+  --radius-lg: 0.5rem;
+  --radius-md: calc(var(--radius-lg) - 2px);
+  --radius-sm: calc(var(--radius-lg) - 4px);
+  
+  --container-max: 1280px;
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these base styles to restore the v3 behavior.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
 }
 
 /* ─── Base ──────────────────────────────────────────────────── */
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 96px;
+  }
 
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 96px;
-  background-color: var(--color-abyss);
-  /* the page is one continuous world: no seams between sections */
-  overflow-x: clip;
-}
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
 
-body {
-  margin: 0;
-  background-color: var(--color-abyss);
-  color: var(--color-ink);
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-  overflow-x: clip;
-}
+  ::selection {
+    background-color: var(--color-electric);
+    color: var(--color-abyss);
+  }
 
-::selection {
-  background-color: var(--color-electric);
-  color: var(--color-abyss);
-}
+  :focus-visible {
+    outline: 2px solid var(--color-azure);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
 
-:focus-visible {
-  outline: 2px solid var(--color-glow);
-  outline-offset: 3px;
-  border-radius: 2px;
-}
-
-/* Only show focus rings for keyboard users, but never suppress them. */
-:focus:not(:focus-visible) {
-  outline: none;
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
 }
 
 /* ─── Scrollbar ─────────────────────────────────────────────── */
@@ -106,315 +140,74 @@ body {
 
 /* ─── Typography primitives ─────────────────────────────────── */
 
-.display {
-  font-family: var(--font-display);
-  font-variation-settings: "opsz" 72;
-  font-weight: 800;
-  text-transform: uppercase;
-  line-height: 0.84;
-  letter-spacing: -0.015em;
-  text-wrap: balance;
-}
+@layer utilities {
+  .display {
+    font-family: var(--font-display);
+    font-variation-settings: "opsz" 72;
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 0.84;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
 
-.display-tight {
-  font-family: var(--font-display);
-  font-variation-settings: "opsz" 40;
-  font-weight: 700;
-  text-transform: uppercase;
-  line-height: 0.9;
-  letter-spacing: 0.005em;
-}
+  .display-tight {
+    font-family: var(--font-display);
+    font-variation-settings: "opsz" 40;
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 0.9;
+    letter-spacing: 0.005em;
+  }
 
-.eyebrow {
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.34em;
-  text-transform: uppercase;
-  color: var(--color-ink-3);
-}
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--color-ink-3);
+  }
 
-.hud {
-  font-family: var(--font-mono);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.06em;
-}
+  .hud {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.06em;
+  }
 
-.prose-lede {
-  color: var(--color-ink-2);
-  line-height: 1.65;
-  text-wrap: pretty;
-}
+  .prose-lede {
+    color: var(--color-ink-2);
+    line-height: 1.65;
+    text-wrap: pretty;
+  }
 
-/* Lit text — as if the beacon is behind it. */
-.lit {
-  background: linear-gradient(
-    180deg,
-    var(--color-paper) 0%,
-    var(--color-ice) 45%,
-    #7fb6ee 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  .container-base {
+    width: 100%;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .container-base {
+      padding-inline: 2rem;
+    }
+  }
 }
 
 /* ─── Surface texture ───────────────────────────────────────── */
-/* Fine grain over the whole page. Invisible once you stop looking
-   for it; without it the flat blues read as digital sludge.       */
-
+/* Extremely subtle noise for texture - opacity greatly reduced */
 .grain-overlay {
   position: fixed;
   inset: 0;
   z-index: 90;
   pointer-events: none;
-  opacity: 0.05;
+  opacity: 0.015;
   mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* Faint block grid — Minecraft geometry as a whisper, not a texture. */
-.block-grid {
-  background-image: linear-gradient(
-      to right,
-      color-mix(in srgb, var(--color-steel) 34%, transparent) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      to bottom,
-      color-mix(in srgb, var(--color-steel) 34%, transparent) 1px,
-      transparent 1px
-    );
-  background-size: 56px 56px;
-}
-
-/* Hairline that only exists where light reaches it. */
-.edge-lit {
-  position: relative;
-}
-.edge-lit::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(
-    var(--edge-angle, 160deg),
-    color-mix(in srgb, var(--color-glow) 55%, transparent),
-    color-mix(in srgb, var(--color-steel) 40%, transparent) 40%,
-    transparent 70%
-  );
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
-/* ─── Slab ──────────────────────────────────────────────────── */
-/* The one container shape used across the site. Bevelled corners
-   instead of border-radius: block geometry, cut by a chisel.      */
-
-.slab {
-  --bevel: 14px;
-  position: relative;
-  padding: 1px; /* the gradient below shows through as a lit edge */
-  clip-path: polygon(
-    var(--bevel) 0,
-    100% 0,
-    100% calc(100% - var(--bevel)),
-    calc(100% - var(--bevel)) 100%,
-    0 100%,
-    0 var(--bevel)
-  );
-  background: linear-gradient(
-    var(--edge-angle, 135deg),
-    color-mix(in srgb, var(--color-glow) 42%, transparent),
-    color-mix(in srgb, var(--color-steel) 55%, transparent) 38%,
-    color-mix(in srgb, var(--color-hair) 90%, transparent) 100%
-  );
-}
-
-.slab > .slab-face {
-  position: relative;
-  clip-path: polygon(
-    var(--bevel) 0,
-    100% 0,
-    100% calc(100% - var(--bevel)),
-    calc(100% - var(--bevel)) 100%,
-    0 100%,
-    0 var(--bevel)
-  );
-  background: var(--slab-fill, linear-gradient(150deg, #071730 0%, #04101f 60%, #030b18 100%));
-}
-
-.slab-sm {
-  --bevel: 8px;
-}
-
-/* ─── Inventory language ────────────────────────────────────── */
-/* A recessed square with a light top-left bevel and a dark bottom-
-   right one. This is the shape the whole store is built out of.   */
-
-.slot {
-  background: linear-gradient(158deg, #08182c 0%, #04101d 100%);
-  box-shadow:
-    inset 1.5px 1.5px 0 rgba(143, 220, 255, 0.09),
-    inset -1.5px -1.5px 0 rgba(0, 0, 0, 0.55);
-}
-
-.slot-lit {
-  box-shadow:
-    inset 1.5px 1.5px 0 color-mix(in srgb, var(--slot-accent, #4da3ff) 55%, transparent),
-    inset -1.5px -1.5px 0 rgba(0, 0, 0, 0.55),
-    0 0 26px -6px color-mix(in srgb, var(--slot-accent, #4da3ff) 70%, transparent);
-}
-
-/* Rarity chip / bar — the ladder marker used across the catalogue. */
-.rarity-bar {
-  background: linear-gradient(
-    90deg,
-    var(--slot-accent, #4da3ff) 0%,
-    color-mix(in srgb, var(--slot-accent, #4da3ff) 18%, transparent) 100%
-  );
-}
-
-/* Arena floor — tighter and colder than the world grid. Box PvP and FFA
-   use this so the combat pages read differently from the survival ones. */
-.arena-grid {
-  background-image:
-    linear-gradient(to right, rgba(77, 163, 255, 0.11) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(77, 163, 255, 0.11) 1px, transparent 1px);
-  background-size: 34px 34px;
-  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 28%, #000 72%, transparent);
-  mask-image: linear-gradient(to bottom, transparent, #000 28%, #000 72%, transparent);
-}
-
-/* Horizontal scrollers fade at the edge instead of hard-cutting. */
-.scroll-x {
-  overflow-x: auto;
-  /* Without this an element's glow or shadow spawns a stray vertical
-     scrollbar inside the strip. Give the container padding for the glow. */
-  overflow-y: hidden;
-  scrollbar-width: thin;
-  -webkit-overflow-scrolling: touch;
-}
-.scroll-x::-webkit-scrollbar {
-  height: 8px;
-}
-.scroll-x::-webkit-scrollbar-thumb {
-  background: var(--color-hair);
-  border-radius: 999px;
-}
-
-/* Enchantment-style metadata: the italic shimmer on an enchanted item. */
-.enchant {
-  color: var(--color-glow);
-  text-shadow: 0 0 14px color-mix(in srgb, var(--color-glow) 45%, transparent);
-}
-
-/* ─── Animation ─────────────────────────────────────────────── */
-
-@keyframes beacon-breathe {
-  0%,
-  100% {
-    opacity: 0.55;
-    transform: scaleX(1);
-  }
-  50% {
-    opacity: 0.85;
-    transform: scaleX(1.08);
-  }
-}
-
-@keyframes halo-breathe {
-  0%,
-  100% {
-    opacity: 0.4;
-  }
-  50% {
-    opacity: 0.72;
-  }
-}
-
-@keyframes mist-drift {
-  from {
-    transform: translate3d(-25%, 0, 0);
-  }
-  to {
-    transform: translate3d(0%, 0, 0);
-  }
-}
-
-@keyframes scan-fall {
-  from {
-    transform: translateY(-100%);
-  }
-  to {
-    transform: translateY(900%);
-  }
-}
-
-@keyframes pulse-ring {
-  0% {
-    transform: scale(0.85);
-    opacity: 0.55;
-  }
-  70% {
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1.9);
-    opacity: 0;
-  }
-}
-
-@keyframes grid-drift {
-  from {
-    background-position: 0 0;
-  }
-  to {
-    background-position: 34px 34px;
-  }
-}
-
-@keyframes hint-fall {
-  0%,
-  100% {
-    transform: translateY(0);
-    opacity: 0.35;
-  }
-  50% {
-    transform: translateY(7px);
-    opacity: 0.9;
-  }
-}
-
-.animate-beacon {
-  animation: beacon-breathe 7s var(--ease-in-out-soft) infinite;
-  transform-origin: bottom center;
-}
-.animate-halo {
-  animation: halo-breathe 7s var(--ease-in-out-soft) infinite;
-}
-.animate-mist {
-  animation: mist-drift 90s linear infinite;
-}
-.animate-mist-slow {
-  animation: mist-drift 160s linear infinite reverse;
-}
-.animate-scan {
-  animation: scan-fall 9s linear infinite;
-}
-.animate-hint {
-  animation: hint-fall 2.4s var(--ease-in-out-soft) infinite;
-}
-.animate-arena {
-  animation: grid-drift 6s linear infinite;
-}
-
-/* ─── Reduced motion ────────────────────────────────────────── */
-
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

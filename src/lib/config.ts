@@ -79,7 +79,6 @@ export const SERVER_CONFIG = {
   /* ── Real server features (do not invent) ─────────────── */
   features: [
     { icon: "Sword", label: "Survival", description: "Classic survival with real stakes" },
-    { icon: "Globe", label: "Custom World", description: "Hand-crafted terrain and biomes" },
     { icon: "Hammer", label: "Player Builds", description: "Build anything, claim everything" },
     { icon: "Calendar", label: "Events", description: "Weekly tournaments and challenges" },
     { icon: "Shield", label: "Active Staff", description: "Moderation around the clock" },
