@@ -1,0 +1,337 @@
+- generic [active] [ref=e1]:
+  - link "Skip to content" [ref=e2] [cursor=pointer]:
+    - /url: "#home"
+  - banner [ref=e3]:
+    - navigation "Primary" [ref=e5]:
+      - link "Clasher Network Survival Network" [ref=e6] [cursor=pointer]:
+        - /url: "#home"
+        - generic [ref=e9]:
+          - generic [ref=e10]: Clasher Network
+          - generic [ref=e11]: Survival Network
+      - list [ref=e12]:
+        - listitem [ref=e13]:
+          - link "Home" [ref=e14] [cursor=pointer]:
+            - /url: "#home"
+        - listitem [ref=e16]:
+          - link "How to Play" [ref=e17] [cursor=pointer]:
+            - /url: "#how-to-play"
+        - listitem [ref=e18]:
+          - link "Rules" [ref=e19] [cursor=pointer]:
+            - /url: "#rules"
+        - listitem [ref=e20]:
+          - link "Discord" [ref=e21] [cursor=pointer]:
+            - /url: "#discord"
+      - button "How to join the server" [ref=e24]:
+        - generic [ref=e25]: Play Now
+  - main [ref=e27]:
+    - generic [ref=e28]:
+      - generic [ref=e30]:
+        - generic [ref=e31]:
+          - generic [ref=e32]: A world shaped by its players
+          - heading "Every block here was placed by someone." [level=1] [ref=e35]:
+            - generic [ref=e36]: Every block here
+            - generic [ref=e38]: was placed
+            - generic [ref=e40]: by someone.
+          - paragraph [ref=e42]: Build your story. Explore a world shaped by its players.
+          - generic [ref=e43]:
+            - button "Play Now" [ref=e45]
+            - link "Join Discord" [ref=e48] [cursor=pointer]:
+              - /url: https://discord.gg/clashernetwork
+          - button "Copy server address play.clashernetwork.fun to clipboard" [ref=e52]:
+            - generic [ref=e54]:
+              - generic [ref=e55]:
+                - generic [ref=e56]: Server address
+                - generic [ref=e57]: play.clashernetwork.fun
+              - generic [ref=e58]: Copy
+        - generic [ref=e68]:
+          - generic [ref=e69]:
+            - generic [ref=e70]: Online
+            - generic [ref=e75]: Live
+          - generic [ref=e76]:
+            - generic [ref=e77]:
+              - term [ref=e78]: Players
+              - definition [ref=e79]: 6 / 100
+            - generic [ref=e80]:
+              - term [ref=e81]: Version
+              - definition [ref=e82]: Velocity 1.7.2-26.2
+            - generic [ref=e83]:
+              - term [ref=e84]: Edition
+              - definition [ref=e85]: Java · Bedrock
+          - paragraph [ref=e86]: ◤━━━━━ ClasherNetwork ━━━━━◥
+      - generic [ref=e87]: Scroll
+    - generic [ref=e93]:
+      - generic [ref=e94]: The world
+      - generic [ref=e98]:
+        - heading "You arrive. The world is already alive." [level=2] [ref=e99]:
+          - generic [ref=e100]: You arrive.
+          - generic [ref=e102]: The world is already alive.
+        - paragraph [ref=e105]: No tutorial island. No empty lobby. You spawn into terrain that other people have already walked through, mined out, fought over and rebuilt. Whatever you do next becomes part of it.
+      - generic [ref=e106]:
+        - generic [ref=e108]:
+          - generic [ref=e109]:
+            - generic [ref=e110]: "01"
+            - heading "Explore" [level=3] [ref=e111]
+          - paragraph [ref=e112]: Walk far enough and the builds stop. That is where it gets interesting.
+        - generic [ref=e114]:
+          - generic [ref=e115]:
+            - generic [ref=e116]: "02"
+            - heading "Create" [level=3] [ref=e117]
+          - paragraph [ref=e118]: Claim your ground and put something on the map that outlasts you.
+        - generic [ref=e120]:
+          - generic [ref=e121]:
+            - generic [ref=e122]: "03"
+            - heading "Belong" [level=3] [ref=e123]
+          - paragraph [ref=e124]: Trade, argue, team up. The server is the people on it.
+    - generic [ref=e128]:
+      - generic [ref=e129]:
+        - generic [ref=e130]:
+          - generic [ref=e131]: Joining the server
+          - heading "Four steps and you are in." [level=2] [ref=e134]:
+            - text: Four steps
+            - generic [ref=e135]: and you are in.
+        - paragraph [ref=e137]: Works on Java and Bedrock. Premium and cracked accounts are both welcome. If you have joined any Minecraft server before, this will take under a minute.
+      - list [ref=e138]:
+        - listitem [ref=e141]:
+          - generic [ref=e145]:
+            - generic [ref=e146]:
+              - generic [ref=e147]: "01"
+              - heading "Get Minecraft ready" [level=3] [ref=e148]
+            - paragraph [ref=e149]: Launch Minecraft on Java or Bedrock. Any recent release works — the server runs 1.21.x. Premium and cracked accounts are both welcome.
+            - paragraph [ref=e150]: Java Edition · Bedrock Edition
+        - listitem [ref=e151]:
+          - generic [ref=e155]:
+            - generic [ref=e156]:
+              - generic [ref=e157]: "02"
+              - heading "Open Multiplayer" [level=3] [ref=e158]
+            - paragraph [ref=e159]: From the main menu choose Multiplayer, then Add Server. Name it anything you like — you will only ever see it in your own list.
+            - paragraph [ref=e160]: Multiplayer → Add Server
+        - listitem [ref=e161]:
+          - generic [ref=e165]:
+            - generic [ref=e166]:
+              - generic [ref=e167]: "03"
+              - heading "Enter the address" [level=3] [ref=e168]
+            - paragraph [ref=e169]: Paste the address below into the Server Address field, then save. Bedrock players enter the address and port separately.
+            - paragraph [ref=e170]: Address play.clashernetwork.fun · Port 8000
+        - listitem [ref=e171]:
+          - generic [ref=e175]:
+            - generic [ref=e176]:
+              - generic [ref=e177]: "04"
+              - heading "Begin your story" [level=3] [ref=e178]
+            - paragraph [ref=e179]: Join the server, pick a direction and start walking. Read the rules once — they are short — and say hello in Discord if you want people to build with.
+            - paragraph [ref=e180]: See you out there
+      - generic [ref=e183]:
+        - paragraph [ref=e184]: The only thing you need
+        - button "Copy server address play.clashernetwork.fun to clipboard" [ref=e187]:
+          - generic [ref=e189]:
+            - generic [ref=e190]:
+              - generic [ref=e191]: Server address
+              - generic [ref=e192]: play.clashernetwork.fun
+            - generic [ref=e193]: Copy
+        - generic [ref=e201]:
+          - link "Get help in Discord" [ref=e203] [cursor=pointer]:
+            - /url: https://discord.gg/clashernetwork
+          - paragraph [ref=e205]: Port 8000 · Bedrock players enter this separately
+    - generic [ref=e207]:
+      - generic [ref=e208]:
+        - generic [ref=e209]:
+          - generic [ref=e210]: The experience
+          - heading "What's waiting on the other side." [level=2] [ref=e213]:
+            - text: What's waiting
+            - generic [ref=e214]: on the other side.
+        - paragraph [ref=e216]: Everything below is running on Clasher Network right now — no roadmap items, no coming-soon banners.
+      - generic [ref=e217]:
+        - generic [ref=e220]:
+          - generic [ref=e221]: "01"
+          - generic [ref=e230]:
+            - heading "Survival" [level=3] [ref=e231]
+            - paragraph [ref=e232]: Classic survival with real stakes
+        - generic [ref=e235]:
+          - generic [ref=e236]: "02"
+          - generic [ref=e243]:
+            - heading "Custom World" [level=3] [ref=e244]
+            - paragraph [ref=e245]: Hand-crafted terrain and biomes
+        - generic [ref=e248]:
+          - generic [ref=e249]: "03"
+          - generic [ref=e257]:
+            - heading "Player Builds" [level=3] [ref=e258]
+            - paragraph [ref=e259]: Build anything, claim everything
+        - generic [ref=e262]:
+          - generic [ref=e263]: "04"
+          - generic [ref=e269]:
+            - heading "Events" [level=3] [ref=e270]
+            - paragraph [ref=e271]: Weekly tournaments and challenges
+        - generic [ref=e274]:
+          - generic [ref=e275]: "05"
+          - generic [ref=e281]:
+            - heading "Active Staff" [level=3] [ref=e282]
+            - paragraph [ref=e283]: Moderation around the clock
+        - generic [ref=e286]:
+          - generic [ref=e287]: "06"
+          - generic [ref=e296]:
+            - heading "Community" [level=3] [ref=e297]
+            - paragraph [ref=e298]: Friendly players from everywhere
+    - generic [ref=e302]:
+      - generic [ref=e303]:
+        - generic [ref=e304]: Live from the server
+        - heading "The world is running right now." [level=2] [ref=e308]
+      - generic [ref=e309]:
+        - generic [ref=e310]:
+          - generic [ref=e311]:
+            - generic [ref=e312]:
+              - paragraph [ref=e313]: Status
+              - paragraph [ref=e314]: Online
+            - generic [ref=e315]:
+              - paragraph [ref=e316]: Version
+              - paragraph [ref=e317]: Velocity 1.7.2-26.2
+              - paragraph [ref=e318]: Reported by server
+          - generic [ref=e329]:
+            - paragraph [ref=e330]: "6"
+            - paragraph [ref=e331]: Playing now
+          - generic [ref=e332]:
+            - generic [ref=e333]:
+              - paragraph [ref=e334]: Players
+              - paragraph [ref=e335]: 6 / 100
+              - paragraph [ref=e336]: Live count
+            - generic [ref=e337]:
+              - paragraph [ref=e338]: Edition
+              - paragraph [ref=e339]: Java · Bedrock
+              - paragraph [ref=e340]: Premium and cracked
+        - generic [ref=e341]:
+          - button "Copy server address play.clashernetwork.fun to clipboard" [ref=e343]:
+            - generic [ref=e345]:
+              - generic [ref=e346]:
+                - generic [ref=e347]: Server address
+                - generic [ref=e348]: play.clashernetwork.fun
+              - generic [ref=e349]: Copy
+          - paragraph [ref=e357]: Checking…
+    - generic [ref=e359]:
+      - generic [ref=e360]:
+        - generic [ref=e361]:
+          - generic [ref=e362]: The codex
+          - heading "Short list. Taken seriously." [level=2] [ref=e365]:
+            - text: Short list.
+            - generic [ref=e366]: Taken seriously.
+        - paragraph [ref=e368]: Twenty lines, four categories. Read them once and you will never think about them again. Break them and staff will.
+      - generic [ref=e369]:
+        - generic [ref=e371]:
+          - heading [level=3] [ref=e372]:
+            - button "01 General How we treat each other 5 rules" [expanded] [ref=e373]:
+              - generic [ref=e375]: "01"
+              - generic [ref=e376]:
+                - generic [ref=e377]: General
+                - generic [ref=e378]: How we treat each other
+              - generic [ref=e379]: 5 rules
+          - region "General rules" [ref=e383]:
+            - list [ref=e384]:
+              - listitem [ref=e385]:
+                - generic [ref=e386]: "01"
+                - generic [ref=e387]: Treat all players with respect — no harassment, bullying, or discrimination.
+              - listitem [ref=e388]:
+                - generic [ref=e389]: "02"
+                - generic [ref=e390]: Follow staff instructions at all times.
+              - listitem [ref=e391]:
+                - generic [ref=e392]: "03"
+                - generic [ref=e393]: No impersonating staff members or other players.
+              - listitem [ref=e394]:
+                - generic [ref=e395]: "04"
+                - generic [ref=e396]: Keep conversations appropriate for all ages.
+              - listitem [ref=e397]:
+                - generic [ref=e398]: "05"
+                - generic [ref=e399]: Report issues through the proper channels on Discord.
+        - heading [level=3] [ref=e402]:
+          - button "02 Gameplay Playing fair 5 rules" [ref=e403]:
+            - generic [ref=e405]: "02"
+            - generic [ref=e406]:
+              - generic [ref=e407]: Gameplay
+              - generic [ref=e408]: Playing fair
+            - generic [ref=e409]: 5 rules
+        - heading [level=3] [ref=e415]:
+          - button "03 Building Other people's work 5 rules" [ref=e416]:
+            - generic [ref=e418]: "03"
+            - generic [ref=e419]:
+              - generic [ref=e420]: Building
+              - generic [ref=e421]: Other people's work
+            - generic [ref=e422]: 5 rules
+        - heading [level=3] [ref=e428]:
+          - button "04 Chat Keeping the channel usable 5 rules" [ref=e429]:
+            - generic [ref=e431]: "04"
+            - generic [ref=e432]:
+              - generic [ref=e433]: Chat
+              - generic [ref=e434]: Keeping the channel usable
+            - generic [ref=e435]: 5 rules
+      - generic [ref=e440]:
+        - paragraph [ref=e441]: Ready to enter?
+        - generic [ref=e442]:
+          - button "Play Now" [ref=e444]
+          - link "Ask a question" [ref=e447] [cursor=pointer]:
+            - /url: https://discord.gg/clashernetwork
+    - generic [ref=e451]:
+      - generic [ref=e452]:
+        - generic [ref=e453]:
+          - generic [ref=e454]: The community
+          - heading "The world doesn't end here." [level=2] [ref=e457]:
+            - text: The world
+            - generic [ref=e458]: doesn't end here.
+          - paragraph [ref=e459]: Most of what happens on the server starts in Discord — trades, builds, raids, arguments about where the next town goes.
+        - list [ref=e461]:
+          - listitem [ref=e462]:
+            - generic [ref=e464]: Meet players before you meet them in game
+          - listitem [ref=e465]:
+            - generic [ref=e467]: Follow announcements and downtime notices
+          - listitem [ref=e468]:
+            - generic [ref=e470]: Find teammates for events and builds
+          - listitem [ref=e471]:
+            - generic [ref=e473]: Get support directly from staff
+      - generic [ref=e474]:
+        - link "Join the Discord discord.gg/clashernetwork Open invite" [ref=e475] [cursor=pointer]:
+          - /url: https://discord.gg/clashernetwork
+          - generic [ref=e477]:
+            - paragraph [ref=e479]: Join the Discord
+            - paragraph [ref=e480]: discord.gg/clashernetwork
+            - generic [ref=e481]:
+              - text: Open invite
+              - generic [ref=e482]: →
+        - link "Having trouble joining? Ask staff" [ref=e485] [cursor=pointer]:
+          - /url: https://discord.gg/clashernetwork
+    - generic [ref=e490]:
+      - generic [ref=e491]: Last thing
+      - heading "Your adventure starts now." [level=2] [ref=e494]:
+        - generic [ref=e495]: Your adventure
+        - generic [ref=e497]: starts now.
+      - button "Copy server address play.clashernetwork.fun to clipboard" [ref=e501]:
+        - generic [ref=e503]:
+          - generic [ref=e504]:
+            - generic [ref=e505]: Server address
+            - generic [ref=e506]: play.clashernetwork.fun
+          - generic [ref=e507]: Copy
+      - generic [ref=e515]:
+        - button "Play Now" [ref=e517]
+        - link "Join Discord" [ref=e520] [cursor=pointer]:
+          - /url: https://discord.gg/clashernetwork
+  - contentinfo [ref=e522]:
+    - generic [ref=e523]:
+      - generic [ref=e524]:
+        - generic [ref=e528]:
+          - generic [ref=e529]: Clasher Network
+          - generic [ref=e530]: play.clashernetwork.fun
+        - navigation "Footer" [ref=e531]:
+          - list [ref=e532]:
+            - listitem [ref=e533]:
+              - link "Home" [ref=e534] [cursor=pointer]:
+                - /url: "#home"
+            - listitem [ref=e535]:
+              - link "How to Play" [ref=e536] [cursor=pointer]:
+                - /url: "#how-to-play"
+            - listitem [ref=e537]:
+              - link "Rules" [ref=e538] [cursor=pointer]:
+                - /url: "#rules"
+            - listitem [ref=e539]:
+              - link "Discord" [ref=e540] [cursor=pointer]:
+                - /url: "#discord"
+            - listitem [ref=e541]:
+              - link "Discord invite" [ref=e542] [cursor=pointer]:
+                - /url: https://discord.gg/clashernetwork
+      - generic [ref=e543]:
+        - paragraph [ref=e544]: © 2026 Clasher Network
+        - paragraph [ref=e545]: Not affiliated with Mojang Studios or Microsoft.
+  - button "Open Next.js Dev Tools" [ref=e551] [cursor=pointer]
