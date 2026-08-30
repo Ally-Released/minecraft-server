@@ -22,6 +22,7 @@ export type Mode = {
   description: string;
   icon: IconName;
   accent: string;
+  image?: string;
   /** Short, scannable facts about how the world plays. */
   traits: { icon: IconName; label: string; value: string }[];
   highlights: string[];
@@ -40,6 +41,7 @@ export const MODES: Mode[] = [
       "The long game. A persistent overworld where the map is shaped entirely by the people on it — roads between bases, farms that outgrew their owners, ruins nobody has cleared. Nothing resets on a timer, so the things you build are still standing the next time you log in.",
     icon: "world",
     accent: "#4da3ff",
+    image: "/assets/survival spawn hb.png",
     traits: [
       { icon: "home", label: "Homes", value: "Set with /home" },
       { icon: "chest", label: "Progression", value: "Gear and ranks" },
@@ -61,6 +63,7 @@ export const MODES: Mode[] = [
       "Box PvP compresses a whole survival server into a single plot. You mine, sell, upgrade and fortify inside your box while everyone around you does the same — and then you go and take theirs. Progression is measured in tiers, and the tier ladder is public, so everyone can see exactly how far ahead you are.",
     icon: "block",
     accent: "#7fa2ff",
+    image: "/assets/box pvp hub.png",
     traits: [
       { icon: "tier", label: "Progression", value: "Ranked tiers" },
       { icon: "key", label: "Loot", value: "Void and daily keys" },
@@ -82,6 +85,7 @@ export const MODES: Mode[] = [
       "A dedicated practice server: no gear grind, no travel, no consequences. Pick a kit, get queued, fight, requeue. Every duel type the network runs lives here — pot, axe, crystal, ranged, mace, objective modes and the ones that exist purely because they are funny.",
     icon: "sword",
     accent: "#55d6ff",
+    image: "/assets/pvp spawn hub.png",
     traits: [
       { icon: "sword", label: "Duel types", value: "7 categories" },
       { icon: "chest", label: "Kits", value: "Provided" },

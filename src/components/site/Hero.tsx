@@ -3,7 +3,6 @@
 import { SERVER_CONFIG } from "@/lib/config";
 import type { ServerStatus } from "@/lib/status";
 import { useLiveStatus } from "@/lib/useLiveStatus";
-import WorldScene from "@/components/scene/WorldScene";
 import { Button } from "@/components/ui/button";
 import CopyIp from "@/components/ui/CopyIp";
 import Link from "next/link";
@@ -14,7 +13,14 @@ export default function Hero({ status: initialStatus }: { status: ServerStatus }
 
   return (
     <section id="home" className="relative isolate min-h-[90svh] overflow-hidden bg-background">
-      <WorldScene />
+      <div className="absolute inset-0 -z-10">
+        <img
+          src="/assets/main spawn hub.png"
+          alt="Main Spawn Hub"
+          className="h-full w-full object-cover opacity-60"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/40 to-background" />
+      </div>
 
       <div className="relative z-10 container-base flex min-h-[90svh] flex-col justify-end pb-20 pt-32 lg:pb-28">
         <div className="max-w-3xl">

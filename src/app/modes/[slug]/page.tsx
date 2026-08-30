@@ -33,13 +33,28 @@ export default async function ModePage({ params }: Params) {
   return (
     <>
       <header className="relative isolate overflow-hidden pb-20 pt-36 sm:pt-44 bg-background">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10"
-          style={{
-            background: `radial-gradient(66% 58% at 78% 0%, color-mix(in srgb, ${m.accent} 20%, transparent), transparent 70%)`,
-          }}
-        />
+        {m.image ? (
+          <div className="absolute inset-0 -z-10">
+            <img
+              src={m.image}
+              alt={m.name}
+              className="h-full w-full object-cover opacity-30"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-background/40 to-background" />
+            <div
+              className="absolute inset-0 mix-blend-color"
+              style={{ backgroundColor: m.accent }}
+            />
+          </div>
+        ) : (
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 -z-10"
+            style={{
+              background: `radial-gradient(66% 58% at 78% 0%, color-mix(in srgb, ${m.accent} 20%, transparent), transparent 70%)`,
+            }}
+          />
+        )}
 
         <div className="relative container-base">
           <Link
