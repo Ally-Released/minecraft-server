@@ -57,8 +57,8 @@ export default function Footer() {
             <nav aria-label="Founders">
               <p className="eyebrow text-primary">Founders</p>
               <ul className="mt-4 space-y-3">
-                <li><a href="https://www.instagram.com/__its.hxedits/" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary transition-colors">Prince Patel</a></li>
-                <li><a href="https://www.instagram.com/royalclasher__/" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary transition-colors">Harsh Patel</a></li>
+                <li><a href="https://www.instagram.com/royalclasher__/" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary transition-colors">Prince Patel</a></li>
+                <li><a href="https://www.instagram.com/__its.hxedits/" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary transition-colors">Harsh Patel</a></li>
               </ul>
             </nav>
             <nav aria-label="Credits">
