@@ -12,7 +12,7 @@ export const SERVER_CONFIG = {
   /* ── Connection ───────────────────────────────────────── */
   ip: "play.clashernetwork.fun",
   port: "8000",
-  version: "1.21.x",
+  version: "1.18.x and above (Java and Bedrock)",
   maxPlayers: 500,
   editions: ["Java", "Bedrock"] as const,
   accounts: "Premium and cracked",

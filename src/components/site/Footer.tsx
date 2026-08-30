@@ -54,6 +54,21 @@ export default function Footer() {
                 </li>
               </ul>
             </nav>
+            <nav aria-label="Founders">
+              <p className="eyebrow text-primary">Founders</p>
+              <ul className="mt-4 space-y-3">
+                <li><a href="https://www.instagram.com/__its.hxedits/" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary transition-colors">Prince Patel</a></li>
+                <li><a href="https://www.instagram.com/royalclasher__/" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary transition-colors">Harsh Patel</a></li>
+              </ul>
+            </nav>
+            <nav aria-label="Credits">
+              <p className="eyebrow text-primary">Site By</p>
+              <ul className="mt-4 space-y-3">
+                <li><a href="https://fakecrime.bio/ally" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary transition-colors">Ally (Bio)</a></li>
+                <li><a href="mailto:ally.aura@icloud.com" className="text-sm text-muted-foreground hover:text-primary transition-colors">ally.aura@icloud.com</a></li>
+                <li><span className="text-sm text-muted-foreground">Discord: demons_arc</span></li>
+              </ul>
+            </nav>
           </div>
         </div>
 

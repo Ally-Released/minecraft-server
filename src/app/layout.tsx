@@ -103,6 +103,11 @@ export default async function RootLayout({
           <CartDrawer />
         </Providers>
         <div aria-hidden className="grain-overlay" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `console.log("%cSite built by Ally\\nBio: https://fakecrime.bio/ally\\nDiscord: demons_arc\\nEmail: ally.aura@icloud.com", "color: #4da3ff; font-weight: bold; font-size: 14px;");`,
+          }}
+        />
       </body>
     </html>
   );
