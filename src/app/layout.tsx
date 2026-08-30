@@ -66,10 +66,6 @@ export const metadata: Metadata = {
     description: SERVER_CONFIG.description,
     images: ["/assets/embed.png"],
   },
-  icons: {
-    icon: [{ url: "/assets/favicon.png", type: "image/png" }],
-    apple: "/assets/favicon.png",
-  },
   robots: { index: true, follow: true },
 };
 
