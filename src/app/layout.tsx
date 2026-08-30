@@ -58,11 +58,13 @@ export const metadata: Metadata = {
     siteName: SERVER_CONFIG.name,
     title,
     description: SERVER_CONFIG.description,
+    images: ["/assets/embed.png"],
   },
   twitter: {
     card: "summary_large_image",
     title,
     description: SERVER_CONFIG.description,
+    images: ["/assets/embed.png"],
   },
   icons: {
     icon: [{ url: "/assets/favicon-64.png", sizes: "64x64", type: "image/png" }],
@@ -72,7 +74,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#01040c",
+  themeColor: "#00FFFF",
   colorScheme: "dark",
 };
 
