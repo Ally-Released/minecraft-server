@@ -55,9 +55,13 @@ export function CommandBadge({
   accent?: string;
 }) {
   return (
-    <div className="flex items-center gap-3 py-1.5">
-      <code className="hud shrink-0 bg-white/5 border border-white/10 px-2 py-1 text-[0.74rem] text-electric">{cmd}</code>
-      <span className="min-w-0 text-[0.82rem] leading-snug text-ink-2">{label}</span>
+    <div className="flex items-center gap-3 py-1.5 px-3 rounded-lg bg-card/60 border border-border/80 hover:border-primary/40 hover:bg-card/90 transition-all duration-150">
+      <code className="hud shrink-0 bg-primary/10 border border-primary/25 rounded px-2 py-0.5 text-[0.72rem] text-primary font-bold font-mono">
+        {cmd}
+      </code>
+      <span className="min-w-0 text-[0.82rem] leading-snug text-foreground/80 font-medium">
+        {label}
+      </span>
     </div>
   );
 }

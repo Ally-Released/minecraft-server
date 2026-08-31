@@ -50,7 +50,7 @@ export default function Hero({ status: initialStatus }: { status: ServerStatus }
             </Button>
           </div>
 
-          <div className="mt-8 max-w-sm">
+          <div className="mt-8 max-w-md">
             <CopyIp />
             <div className="mt-3 flex items-center gap-2 pl-1">
               <span className={`h-1.5 w-1.5 rounded-full ${online ? "bg-electric" : "bg-ink-3"}`} />

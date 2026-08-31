@@ -14,6 +14,7 @@ import { useCart } from "./cart";
 import { CommandBadge, RarityBadge, StatRow } from "./Bits";
 import PurchaseDialog from "./PurchaseDialog";
 import { Button } from "@/components/ui/button";
+import MinecraftInventory from "./MinecraftInventory";
 
 function effectiveRank(cat: Catalogue, index: number) {
   // Simple helper if we need cascading ranks, but for now we'll just return the rank
@@ -76,14 +77,13 @@ function Detail({ cat, index }: { cat: Catalogue; index: number }) {
     <div>
       <div className="flex flex-col sm:flex-row gap-6 mb-10">
         <div className="flex-1 min-w-0">
-          <div className="flex gap-2 items-center mb-4">
-            <RarityBadge rarity={rank.rarity} />
-            {rank.badge && (
-              <span className="hud border border-border px-2 py-1 rounded text-[0.6rem] uppercase tracking-widest text-muted-foreground">
+          {rank.badge && (
+            <div className="mb-4">
+              <span className="hud border border-primary/40 bg-primary/10 px-2.5 py-1 rounded text-[0.65rem] uppercase tracking-widest text-primary font-semibold">
                 {rank.badge}
               </span>
-            )}
-          </div>
+            </div>
+          )}
           <h3 className="display text-4xl sm:text-5xl text-foreground">
             {rank.name}
           </h3>
@@ -95,7 +95,7 @@ function Detail({ cat, index }: { cat: Catalogue; index: number }) {
 
       <div className="grid gap-10 sm:grid-cols-2">
         <section>
-          <p className="eyebrow border-b border-border pb-3 text-primary">Gear</p>
+          <p className="eyebrow border-b border-border pb-3 text-primary">Key Highlights</p>
           <div className="mt-4 space-y-3">
             {rank.stats.map((s) => (
               <StatRow key={s.label} {...s} accent={r.accent} />
@@ -105,7 +105,7 @@ function Detail({ cat, index }: { cat: Catalogue; index: number }) {
 
         {rank.extras.length > 0 && (
           <section>
-            <p className="eyebrow border-b border-border pb-3 text-primary">World & extras</p>
+            <p className="eyebrow border-b border-border pb-3 text-primary">Economy & Limits</p>
             <div className="mt-4 space-y-3">
               {rank.extras.map((s) => (
                 <StatRow key={s.label} {...s} accent={r.accent} />
@@ -114,8 +114,18 @@ function Detail({ cat, index }: { cat: Catalogue; index: number }) {
           </section>
         )}
 
+        {/* Minecraft Kit Inventory GUI Preview */}
+        {cat.id === "survival" && (
+          <section className="sm:col-span-2 pt-2 border-t border-border/60">
+            <MinecraftInventory
+              rankId={rank.id}
+              title={`${rank.name} Kit Gear & Items`}
+            />
+          </section>
+        )}
+
         <section className="sm:col-span-2">
-          <p className="eyebrow border-b border-border pb-3 text-primary">Commands</p>
+          <p className="eyebrow border-b border-border pb-3 text-primary">Included Commands</p>
           <div className="mt-5 flex flex-wrap gap-3">
             {rank.commands.map((c) => (
               <CommandBadge key={c.cmd} {...c} accent={r.accent} />
