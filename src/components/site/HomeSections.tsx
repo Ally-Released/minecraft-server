@@ -99,27 +99,38 @@ export function StoreCta() {
           </div>
 
           <div className="space-y-4 lg:pl-12">
-            {CATALOGUES.map((cat) => (
-              <Link
-                key={cat.id}
-                href={cat.slug}
-                className="group flex items-center justify-between p-6 rounded-lg border border-border bg-card transition-colors hover:border-primary/50 hover:bg-card/80"
-              >
-                <div>
-                  <h3 className="display-tight text-2xl text-foreground">
-                    {cat.name}
-                  </h3>
-                  <p className="hud mt-2 text-xs uppercase tracking-widest text-muted-foreground">
-                    {cat.ranks.length} tiers · from {price(Math.min(...cat.ranks.map((r) => r.price)))}
-                  </p>
-                </div>
-                <Icon
-                  name="arrow"
-                  size={20}
-                  className="text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary"
-                />
-              </Link>
-            ))}
+            {CATALOGUES.map((cat) => {
+              const hasSale = cat.ranks.some((r) => r.originalPrice && r.originalPrice > r.price);
+              return (
+                <Link
+                  key={cat.id}
+                  href={cat.slug}
+                  className="group flex items-center justify-between p-6 rounded-lg border border-border bg-card transition-colors hover:border-primary/50 hover:bg-card/80"
+                >
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="display-tight text-2xl text-foreground">
+                        {cat.name}
+                      </h3>
+                      {hasSale && (
+                        <span className="inline-flex items-center gap-1 rounded-full border border-red-500/40 bg-red-500/15 px-2 py-0.5 text-[0.62rem] font-bold uppercase tracking-wider text-red-400 shadow-sm shadow-red-500/15">
+                          <span className="h-1 w-1 rounded-full bg-red-500 animate-pulse" />
+                          Sale
+                        </span>
+                      )}
+                    </div>
+                    <p className="hud mt-2 text-xs uppercase tracking-widest text-muted-foreground">
+                      {cat.ranks.length} tiers · from {price(Math.min(...cat.ranks.map((r) => r.price)))}
+                    </p>
+                  </div>
+                  <Icon
+                    name="arrow"
+                    size={20}
+                    className="text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary"
+                  />
+                </Link>
+              );
+            })}
           </div>
         </div>
       </div>

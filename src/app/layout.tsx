@@ -5,6 +5,7 @@ import { fetchServerStatus } from "@/lib/status";
 import Nav from "@/components/site/Nav";
 import Footer from "@/components/site/Footer";
 import CartDrawer from "@/components/store/CartDrawer";
+import SalePopupModal from "@/components/store/SalePopupModal";
 import Providers from "./providers";
 import "./globals.css";
 
@@ -99,6 +100,7 @@ export default async function RootLayout({
           <main id="main">{children}</main>
           <Footer />
           <CartDrawer />
+          <SalePopupModal />
         </Providers>
         <div aria-hidden className="grain-overlay" />
         <script

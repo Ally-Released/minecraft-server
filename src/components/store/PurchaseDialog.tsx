@@ -104,7 +104,7 @@ export default function PurchaseDialog({
                 <div className="flex items-center gap-2">
                   <p className="hud text-[0.58rem] uppercase tracking-[0.24em] text-ink-3">Total</p>
                   {rank.saleLabel && (
-                    <span className="rounded bg-emerald-500/20 border border-emerald-500/30 px-1.5 py-0.5 text-[0.6rem] font-semibold text-emerald-400">
+                    <span className="rounded bg-red-500/20 border border-red-500/40 px-1.5 py-0.5 text-[0.6rem] font-bold uppercase text-red-400 shadow-sm shadow-red-500/15">
                       {rank.saleLabel}
                     </span>
                   )}

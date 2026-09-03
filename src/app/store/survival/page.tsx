@@ -19,8 +19,8 @@ export default function SurvivalStorePage() {
           <div className="flex items-center gap-3 mb-6 flex-wrap">
             <span aria-hidden className="h-px w-9" style={{ backgroundColor: CAT.accent }} />
             <span className="eyebrow" style={{ color: CAT.accent }}>Survival · Ranks & progression</span>
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-[0.68rem] font-semibold uppercase tracking-wider text-emerald-400 shadow-sm">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-red-500/40 bg-red-500/15 px-2.5 py-0.5 text-[0.68rem] font-bold uppercase tracking-wider text-red-400 shadow-sm shadow-red-500/15">
+              <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />
               Limited Time Sale · Up to 29% Off
             </span>
           </div>

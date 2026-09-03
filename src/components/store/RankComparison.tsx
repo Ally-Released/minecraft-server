@@ -53,7 +53,7 @@ export default function RankComparison({ catalogue }: { catalogue: Catalogue }) 
                           {price(rank.price)}
                         </span>
                         {rank.saleLabel && (
-                          <span className="mt-0.5 rounded bg-emerald-500/15 border border-emerald-500/30 px-1 py-0.2 text-[0.52rem] font-bold uppercase text-emerald-400 leading-tight">
+                          <span className="mt-0.5 rounded bg-red-500/20 border border-red-500/40 px-1 py-0.2 text-[0.52rem] font-bold uppercase text-red-400 leading-tight shadow-sm shadow-red-500/10">
                             {rank.saleLabel}
                           </span>
                         )}

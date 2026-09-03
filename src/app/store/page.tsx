@@ -26,8 +26,8 @@ function CategoryPanel({ id }: { id: string }) {
                 {cat.eyebrow}
               </span>
               {hasSale && (
-                <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-[0.62rem] font-semibold uppercase tracking-wider text-emerald-400">
-                  <span className="h-1 w-1 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="inline-flex items-center gap-1 rounded-full border border-red-500/40 bg-red-500/15 px-2 py-0.5 text-[0.62rem] font-bold uppercase tracking-wider text-red-400 shadow-sm shadow-red-500/15">
+                  <span className="h-1 w-1 rounded-full bg-red-500 animate-pulse" />
                   Sale Active
                 </span>
               )}

@@ -60,7 +60,7 @@ function RankSelector({
                   {rank.name}
                 </span>
                 {rank.saleLabel && (
-                  <span className="rounded bg-emerald-500/15 border border-emerald-500/30 px-1.5 py-0.5 text-[0.55rem] font-bold uppercase tracking-wider text-emerald-400">
+                  <span className="rounded bg-red-500/20 border border-red-500/40 px-1.5 py-0.5 text-[0.55rem] font-bold uppercase tracking-wider text-red-400 shadow-sm shadow-red-500/20">
                     {rank.saleLabel}
                   </span>
                 )}
@@ -210,9 +210,9 @@ function Purchase({ cat, index }: { cat: Catalogue; index: number }) {
           {cat.name} rank
         </p>
         {rank.saleLabel && (
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wider text-emerald-400 shadow-sm">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            {rank.saleLabel}
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-red-500/40 bg-red-500/15 px-2.5 py-0.5 text-[0.65rem] font-bold uppercase tracking-wider text-red-400 shadow-sm shadow-red-500/20">
+            <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />
+            {rank.saleLabel} SALE
           </span>
         )}
       </div>
@@ -226,7 +226,7 @@ function Purchase({ cat, index }: { cat: Catalogue; index: number }) {
             <span className="hud text-base line-through text-muted-foreground/60">
               {price(rank.originalPrice!)}
             </span>
-            <span className="text-[0.65rem] font-medium text-emerald-400">
+            <span className="text-[0.68rem] font-bold uppercase tracking-wide text-red-400">
               Save {price(savings)}
             </span>
           </div>
@@ -240,7 +240,7 @@ function Purchase({ cat, index }: { cat: Catalogue; index: number }) {
       <div className="mt-8 space-y-3">
         <Button
           onClick={() => setDialog(true)}
-          className="w-full font-semibold"
+          className="w-full font-semibold bg-red-600 hover:bg-red-500 text-white shadow-md shadow-red-600/20"
         >
           Buy {rank.name} · {price(rank.price)}
         </Button>
@@ -263,7 +263,7 @@ function Purchase({ cat, index }: { cat: Catalogue; index: number }) {
         ].map(([k, v]) => (
           <div key={k} className="flex items-baseline justify-between gap-4">
             <dt className="hud text-[0.65rem] uppercase tracking-widest text-muted-foreground">{k}</dt>
-            <dd className={`text-right text-sm ${k === "Discount" ? "font-semibold text-emerald-400" : "text-foreground"}`}>{v}</dd>
+            <dd className={`text-right text-sm ${k === "Discount" ? "font-bold text-red-400" : "text-foreground"}`}>{v}</dd>
           </div>
         ))}
       </dl>

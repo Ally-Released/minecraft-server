@@ -141,8 +141,8 @@ export default function CartDrawer() {
             <footer className="relative border-t border-border px-6 py-5 bg-card">
               {cart.items.reduce((sum, item) => item.originalPrice && item.originalPrice > item.price ? sum + (item.originalPrice - item.price) : sum, 0) > 0 && (
                 <div className="flex items-center justify-between text-xs mb-2">
-                  <span className="hud uppercase tracking-widest text-emerald-400 font-semibold">Total savings</span>
-                  <span className="font-semibold text-emerald-400">
+                  <span className="hud uppercase tracking-widest text-red-400 font-bold">Total savings</span>
+                  <span className="font-bold text-red-400">
                     -{price(cart.items.reduce((sum, item) => item.originalPrice && item.originalPrice > item.price ? sum + (item.originalPrice - item.price) : sum, 0))}
                   </span>
                 </div>
