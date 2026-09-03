@@ -7,7 +7,7 @@ const CAT = catalogue("survival")!;
 
 export const metadata: Metadata = {
   title: "Survival ranks",
-  description: `${CAT.blurb} Five tiers from ${price(CAT.ranks[0].price)}, with gear kits, economy balance, commands and extra homes.`,
+  description: `${CAT.blurb} Five tiers from ${price(CAT.ranks[0].price)}, with gear kits, player vaults, commands and extra homes.`,
   alternates: { canonical: "/store/survival" },
 };
 
@@ -32,7 +32,7 @@ export default function SurvivalStorePage() {
               ["Tiers", `${CAT.ranks.length}`],
               ["From", price(CAT.ranks[0].price)],
               ["Top tier", CAT.ranks[CAT.ranks.length - 1].name],
-              ["Homes", "4 → 30"],
+              ["Homes", "2 → 15"],
             ].map(([k, v]) => (
               <div key={k}>
                 <dt className="hud text-xs uppercase tracking-widest text-muted-foreground">{k}</dt>
