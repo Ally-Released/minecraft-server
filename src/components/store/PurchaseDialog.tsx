@@ -41,6 +41,7 @@ export default function PurchaseDialog({
       rankId: rank.id,
       rankName: rank.name,
       price: rank.price,
+      originalPrice: rank.originalPrice,
       rarity: rank.rarity,
     });
     onOpenChange(false);
@@ -100,8 +101,22 @@ export default function PurchaseDialog({
 
             <div className="mt-7 flex items-end justify-between border-t border-hair pt-5">
               <div>
-                <p className="hud text-[0.58rem] uppercase tracking-[0.24em] text-ink-3">Total</p>
-                <p className="display text-[2.4rem] leading-none text-paper">{price(rank.price)}</p>
+                <div className="flex items-center gap-2">
+                  <p className="hud text-[0.58rem] uppercase tracking-[0.24em] text-ink-3">Total</p>
+                  {rank.saleLabel && (
+                    <span className="rounded bg-emerald-500/20 border border-emerald-500/30 px-1.5 py-0.5 text-[0.6rem] font-semibold text-emerald-400">
+                      {rank.saleLabel}
+                    </span>
+                  )}
+                </div>
+                <div className="mt-1 flex items-baseline gap-2.5">
+                  <p className="display text-[2.4rem] leading-none text-paper">{price(rank.price)}</p>
+                  {rank.originalPrice && rank.originalPrice > rank.price && (
+                    <span className="hud text-sm line-through text-ink-3">
+                      {price(rank.originalPrice)}
+                    </span>
+                  )}
+                </div>
               </div>
               <button
                 type="button"

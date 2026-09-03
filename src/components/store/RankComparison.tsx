@@ -39,14 +39,30 @@ export default function RankComparison({ catalogue }: { catalogue: Catalogue }) 
                     />
                     <span
                       className={`display-tight mt-1 text-base leading-none transition-colors duration-200 ${
-                        on ? "text-foreground" : "text-muted-foreground group-hover:text-foreground"
+                        on ? "text-foreground font-semibold" : "text-muted-foreground group-hover:text-foreground"
                       }`}
                     >
                       {rank.name}
                     </span>
-                    <span className="hud text-[0.65rem] tracking-widest text-muted-foreground">
-                      {price(rank.price)}
-                    </span>
+                    {rank.originalPrice && rank.originalPrice > rank.price ? (
+                      <div className="flex flex-col items-center gap-0.5">
+                        <span className="hud text-[0.6rem] line-through text-muted-foreground/60 leading-none">
+                          {price(rank.originalPrice)}
+                        </span>
+                        <span className={`hud text-[0.7rem] font-bold tracking-wider leading-none ${on ? "text-primary" : "text-foreground"}`}>
+                          {price(rank.price)}
+                        </span>
+                        {rank.saleLabel && (
+                          <span className="mt-0.5 rounded bg-emerald-500/15 border border-emerald-500/30 px-1 py-0.2 text-[0.52rem] font-bold uppercase text-emerald-400 leading-tight">
+                            {rank.saleLabel}
+                          </span>
+                        )}
+                      </div>
+                    ) : (
+                      <span className="hud text-[0.65rem] tracking-widest text-muted-foreground">
+                        {price(rank.price)}
+                      </span>
+                    )}
                   </button>
                 </th>
               );

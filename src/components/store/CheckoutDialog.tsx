@@ -61,6 +61,12 @@ export default function CheckoutDialog({
               <span className="display mt-1 text-5xl leading-none text-primary">
                 {price(cart.subtotal)}
               </span>
+              {cart.items.reduce((sum, item) => item.originalPrice && item.originalPrice > item.price ? sum + (item.originalPrice - item.price) : sum, 0) > 0 && (
+                <span className="mt-2.5 inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  Discount applied · Saved {price(cart.items.reduce((sum, item) => item.originalPrice && item.originalPrice > item.price ? sum + (item.originalPrice - item.price) : sum, 0))}
+                </span>
+              )}
             </div>
 
             <div className="flex flex-col items-center">

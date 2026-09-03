@@ -11,7 +11,7 @@ import {
   type Rank,
 } from "@/lib/store";
 import { useCart } from "./cart";
-import { CommandBadge, RarityBadge, StatRow } from "./Bits";
+import { CommandBadge, StatRow } from "./Bits";
 import PurchaseDialog from "./PurchaseDialog";
 import { Button } from "@/components/ui/button";
 import MinecraftInventory from "./MinecraftInventory";
@@ -37,14 +37,16 @@ function RankSelector({
       {ranks.map((rank, i) => {
         const r = RARITY[rank.rarity];
         const on = i === selected;
+        const hasDiscount = Boolean(rank.originalPrice && rank.originalPrice > rank.price);
+
         return (
           <button
             key={rank.id}
             type="button"
             onClick={() => onSelect(i)}
             aria-current={on ? "true" : undefined}
-            className={`flex items-center gap-4 border px-4 py-3 text-left transition-colors rounded-md ${
-              layout === "grid" ? "min-w-[10rem] flex-col text-center" : "w-full"
+            className={`flex items-center gap-4 border px-4 py-3 text-left transition-all rounded-md ${
+              layout === "grid" ? "min-w-[10.5rem] flex-col text-center" : "w-full"
             } ${
               on ? "bg-card border-border shadow-sm" : "bg-transparent border-transparent hover:bg-muted/50"
             }`}
@@ -52,13 +54,27 @@ function RankSelector({
               borderColor: on ? `color-mix(in srgb, ${r.accent} 40%, transparent)` : undefined,
             }}
           >
-            <div className="flex-1 min-w-0">
-              <span className={`display-tight block text-lg transition-colors ${on ? "text-foreground" : "text-muted-foreground"}`}>
-                {rank.name}
-              </span>
-              <span className="hud mt-1 block text-[0.65rem] uppercase tracking-widest text-muted-foreground">
-                {price(rank.price)}
-              </span>
+            <div className="flex-1 min-w-0 w-full">
+              <div className={`flex items-center gap-2 ${layout === "grid" ? "justify-center" : "justify-between"}`}>
+                <span className={`display-tight block text-lg transition-colors ${on ? "text-foreground font-medium" : "text-muted-foreground"}`}>
+                  {rank.name}
+                </span>
+                {rank.saleLabel && (
+                  <span className="rounded bg-emerald-500/15 border border-emerald-500/30 px-1.5 py-0.5 text-[0.55rem] font-bold uppercase tracking-wider text-emerald-400">
+                    {rank.saleLabel}
+                  </span>
+                )}
+              </div>
+              <div className={`hud mt-1.5 flex items-center gap-2 text-[0.65rem] uppercase tracking-widest ${layout === "grid" ? "justify-center" : "justify-start"}`}>
+                <span className={on ? "text-foreground font-semibold" : "text-muted-foreground"}>
+                  {price(rank.price)}
+                </span>
+                {hasDiscount && (
+                  <span className="line-through text-muted-foreground/60 text-[0.6rem]">
+                    {price(rank.originalPrice!)}
+                  </span>
+                )}
+              </div>
             </div>
           </button>
         );
@@ -169,6 +185,8 @@ function Purchase({ cat, index }: { cat: Catalogue; index: number }) {
   const cart = useCart();
   const [dialog, setDialog] = useState(false);
   const inCart = cart.items.some((i) => i.key === `${cat.id}:${rank.id}`);
+  const hasDiscount = Boolean(rank.originalPrice && rank.originalPrice > rank.price);
+  const savings = hasDiscount ? rank.originalPrice! - rank.price : 0;
 
   const addToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
     cart.add(
@@ -178,6 +196,7 @@ function Purchase({ cat, index }: { cat: Catalogue; index: number }) {
         rankId: rank.id,
         rankName: rank.name,
         price: rank.price,
+        originalPrice: rank.originalPrice,
         rarity: rank.rarity,
       },
       e.currentTarget.getBoundingClientRect()
@@ -186,20 +205,44 @@ function Purchase({ cat, index }: { cat: Catalogue; index: number }) {
 
   return (
     <div className="lg:sticky lg:top-28 border border-border rounded-lg bg-card p-6 sm:p-8">
-      <p className="hud text-[0.65rem] uppercase tracking-widest text-muted-foreground">
-        {cat.name} rank
-      </p>
-      <p className="display mt-2 text-4xl text-foreground">{price(rank.price)}</p>
+      <div className="flex items-center justify-between gap-2">
+        <p className="hud text-[0.65rem] uppercase tracking-widest text-muted-foreground">
+          {cat.name} rank
+        </p>
+        {rank.saleLabel && (
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wider text-emerald-400 shadow-sm">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            {rank.saleLabel}
+          </span>
+        )}
+      </div>
+
+      <div className="mt-3 flex items-baseline gap-3 flex-wrap">
+        <p className="display text-4xl sm:text-5xl text-foreground font-bold tracking-tight">
+          {price(rank.price)}
+        </p>
+        {hasDiscount && (
+          <div className="flex flex-col">
+            <span className="hud text-base line-through text-muted-foreground/60">
+              {price(rank.originalPrice!)}
+            </span>
+            <span className="text-[0.65rem] font-medium text-emerald-400">
+              Save {price(savings)}
+            </span>
+          </div>
+        )}
+      </div>
+
       <p className="hud mt-2 text-[0.65rem] uppercase tracking-widest text-muted-foreground">
-        One-time payment
+        One-time payment · Instant in-game delivery
       </p>
 
       <div className="mt-8 space-y-3">
         <Button
           onClick={() => setDialog(true)}
-          className="w-full"
+          className="w-full font-semibold"
         >
-          Buy {rank.name}
+          Buy {rank.name} · {price(rank.price)}
         </Button>
 
         <Button
@@ -216,10 +259,11 @@ function Purchase({ cat, index }: { cat: Catalogue; index: number }) {
         {[
           ["Delivery", "In game, instantly"],
           ["Applies to", cat.name],
+          ...(hasDiscount ? [["Discount", `${rank.saleLabel ?? "Active"} (Save ${price(savings)})`]] : []),
         ].map(([k, v]) => (
           <div key={k} className="flex items-baseline justify-between gap-4">
             <dt className="hud text-[0.65rem] uppercase tracking-widest text-muted-foreground">{k}</dt>
-            <dd className="text-right text-sm text-foreground">{v}</dd>
+            <dd className={`text-right text-sm ${k === "Discount" ? "font-semibold text-emerald-400" : "text-foreground"}`}>{v}</dd>
           </div>
         ))}
       </dl>

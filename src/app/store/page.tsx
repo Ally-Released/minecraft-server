@@ -14,15 +14,24 @@ export const metadata: Metadata = {
 function CategoryPanel({ id }: { id: string }) {
   const cat = CATALOGUES.find((c) => c.id === id)!;
   const cheapest = Math.min(...cat.ranks.map((r) => r.price));
+  const hasSale = cat.ranks.some((r) => r.originalPrice && r.originalPrice > r.price);
 
   return (
     <Link href={cat.slug} className="group block">
       <Card className="transition-all duration-200 hover:border-primary/50 hover:bg-card/80">
         <CardContent className="p-8 flex flex-col md:flex-row md:items-baseline md:justify-between gap-8">
           <div>
-            <span className="hud block text-xs uppercase tracking-widest text-primary font-bold">
-              {cat.eyebrow}
-            </span>
+            <div className="flex items-center gap-2.5">
+              <span className="hud block text-xs uppercase tracking-widest text-primary font-bold">
+                {cat.eyebrow}
+              </span>
+              {hasSale && (
+                <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-[0.62rem] font-semibold uppercase tracking-wider text-emerald-400">
+                  <span className="h-1 w-1 rounded-full bg-emerald-400 animate-pulse" />
+                  Sale Active
+                </span>
+              )}
+            </div>
             <span className="display mt-3 block text-4xl sm:text-5xl text-foreground">
               {cat.name}
             </span>

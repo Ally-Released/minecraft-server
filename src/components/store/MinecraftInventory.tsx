@@ -26,10 +26,12 @@ export default function MinecraftInventory({
 
   // Update default selected item when rank changes
   useEffect(() => {
-    setSelectedItem(items[0] || null);
-    setHoveredItem(null);
-    setShowTooltip(false);
-  }, [rankId]);
+    queueMicrotask(() => {
+      setSelectedItem(items[0] || null);
+      setHoveredItem(null);
+      setShowTooltip(false);
+    });
+  }, [rankId, items]);
 
   const handleHover = (item: MinecraftItem, e: React.MouseEvent) => {
     setHoveredItem(item);

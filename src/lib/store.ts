@@ -49,6 +49,8 @@ export type Rank = {
   id: string;
   name: string;
   price: number;
+  originalPrice?: number;
+  saleLabel?: string;
   rarity: RarityKey;
   tagline: string;
   /** Headline metadata — rendered as Minecraft item stats. */
@@ -86,7 +88,9 @@ const SURVIVAL_RANKS: Rank[] = [
   {
     id: "vip",
     name: "VIP",
-    price: 100,
+    price: 80,
+    originalPrice: 100,
+    saleLabel: "20% OFF",
     rarity: "uncommon",
     tagline: "Starter Survival Rank with Enchanted Diamond gear, /craft, /hat, 2 homes and VIP Kit.",
     stats: [
@@ -108,7 +112,9 @@ const SURVIVAL_RANKS: Rank[] = [
   {
     id: "elite",
     name: "ELITE",
-    price: 350,
+    price: 250,
+    originalPrice: 350,
+    saleLabel: "29% OFF",
     rarity: "rare",
     tagline: "Full Netherite gear, Ender Chest, Player Vault 1, portable stations, /back and 4 homes.",
     stats: [
@@ -139,7 +145,9 @@ const SURVIVAL_RANKS: Rank[] = [
   {
     id: "premium",
     name: "PREMIUM",
-    price: 500,
+    price: 400,
+    originalPrice: 500,
+    saleLabel: "20% OFF",
     rarity: "epic",
     badge: "Best value",
     tagline: "Improved Netherite gear, /heal, /feed, /repair, portable stations, 2 PVs and 6 homes.",
@@ -179,7 +187,9 @@ const SURVIVAL_RANKS: Rank[] = [
   {
     id: "galaxy",
     name: "GALAXY",
-    price: 800,
+    price: 650,
+    originalPrice: 800,
+    saleLabel: "19% OFF",
     rarity: "electric",
     badge: "Most popular",
     tagline: "Creative flight, God Netherite gear, /repair all, /near, /nick, 4 PVs and 10 homes.",
@@ -224,7 +234,9 @@ const SURVIVAL_RANKS: Rank[] = [
   {
     id: "royal",
     name: "ROYAL",
-    price: 1200,
+    price: 1000,
+    originalPrice: 1200,
+    saleLabel: "17% OFF",
     rarity: "legendary",
     badge: "Ultimate rank",
     tagline: "The supreme rank with Full Royal God Netherite, /pv 1-5, 15 homes, Daily Royal Rewards and Custom Messages.",

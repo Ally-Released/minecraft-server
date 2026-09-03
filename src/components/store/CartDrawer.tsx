@@ -72,7 +72,14 @@ export default function CartDrawer() {
                           {item.catalogueName}
                         </span>
                       </span>
-                      <span className="hud shrink-0 text-sm font-semibold">{price(item.price)}</span>
+                      <div className="shrink-0 text-right">
+                        <span className="hud block text-sm font-semibold text-foreground">{price(item.price)}</span>
+                        {item.originalPrice && item.originalPrice > item.price && (
+                          <span className="hud block text-[0.65rem] line-through text-muted-foreground/60">
+                            {price(item.originalPrice)}
+                          </span>
+                        )}
+                      </div>
                       <button
                         type="button"
                         onClick={() => cart.remove(item.key)}
@@ -132,6 +139,14 @@ export default function CartDrawer() {
 
           {cart.count > 0 && (
             <footer className="relative border-t border-border px-6 py-5 bg-card">
+              {cart.items.reduce((sum, item) => item.originalPrice && item.originalPrice > item.price ? sum + (item.originalPrice - item.price) : sum, 0) > 0 && (
+                <div className="flex items-center justify-between text-xs mb-2">
+                  <span className="hud uppercase tracking-widest text-emerald-400 font-semibold">Total savings</span>
+                  <span className="font-semibold text-emerald-400">
+                    -{price(cart.items.reduce((sum, item) => item.originalPrice && item.originalPrice > item.price ? sum + (item.originalPrice - item.price) : sum, 0))}
+                  </span>
+                </div>
+              )}
               <div className="flex items-baseline justify-between mb-4">
                 <span className="hud text-xs uppercase tracking-widest text-muted-foreground">
                   Subtotal

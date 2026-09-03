@@ -18,6 +18,7 @@ export type CartItem = {
   rankId: string;
   rankName: string;
   price: number;
+  originalPrice?: number;
   rarity: RarityKey;
 };
 
@@ -66,7 +67,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const saved = read();
-    if (saved) setCart(saved);
+    if (saved) {
+      queueMicrotask(() => setCart(saved));
+    }
   }, []);
 
   useEffect(() => {
