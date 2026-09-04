@@ -15,6 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/rules',
     '/pvp',
     '/discord',
+    '/leaderboard',
   ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified,

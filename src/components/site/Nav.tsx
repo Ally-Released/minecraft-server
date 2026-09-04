@@ -17,6 +17,7 @@ const LINKS = [
   { href: "/how-to-play", label: "How to Play" },
   { href: "/rules", label: "Rules" },
   { href: "/store", label: "Store", emphasis: true },
+  { href: "/leaderboard", label: "Leaderboard" },
   { href: "/discord", label: "Discord" },
 ];
 

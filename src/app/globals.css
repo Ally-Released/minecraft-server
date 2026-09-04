@@ -69,6 +69,31 @@
   --radius-sm: calc(var(--radius-lg) - 4px);
   
   --container-max: 1280px;
+
+  /* PvPHQ-style competitive ladder (leaderboard only) */
+  --color-lb-page: #07080d;
+  --color-lb-app: #0b0d14;
+  --color-lb-surface: #11131b;
+  --color-lb-card2: #161924;
+  --color-lb-raised: #1e2230;
+  --color-lb-brand: #e7c163;
+  --color-lb-brand-on: #1b1303;
+  --color-lb-brand-soft: #ffcf66;
+  --color-lb-hi: #eef1f7;
+  --color-lb-body: #aeb6c6;
+  --color-lb-mid: #727c92;
+  --color-lb-low: #4d566b;
+  --color-lb-pos: #44c267;
+  --color-lb-neg: #e5556b;
+  --color-lb-line: #ffffff0f;
+  --color-lb-line-strong: #ffffff21;
+  --color-lb-ht: #dd7e46;
+  --color-lb-mt: #6ea0ff;
+  --color-lb-lt: #8b93a7;
+  --color-lb-gold: #ffc53f;
+  --color-lb-silver: #cad3df;
+  --color-lb-bronze: #c47a48;
+  --font-lb: var(--font-archivo), var(--font-sans);
 }
 
 /*
@@ -197,6 +222,95 @@
 
 /* ─── Surface texture ───────────────────────────────────────── */
 /* Extremely subtle noise for texture - opacity greatly reduced */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.lb-hq {
+  background: var(--color-lb-page);
+  color: var(--color-lb-body);
+  font-family: var(--font-lb);
+}
+
+.lb-hq .lb-display {
+  font-family: var(--font-lb);
+  font-weight: 800;
+}
+
+.lb-hq .lb-eyebrow {
+  font-family: var(--font-lb);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.lb-hq .lb-stat {
+  font-family: var(--font-lb);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+@keyframes lb-rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes lb-sheen {
+  from {
+    background-position: 220% 0;
+  }
+  to {
+    background-position: -120% 0;
+  }
+}
+
+.lb-rise {
+  animation: lb-rise 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.lb-climb-track {
+  height: 8px;
+  background: #ffffff14;
+  overflow: hidden;
+}
+
+.lb-climb-fill {
+  height: 100%;
+  transition: width 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lb-podium-sheen {
+  pointer-events: none;
+  mix-blend-mode: screen;
+  background-image: linear-gradient(
+    105deg,
+    transparent 42%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 58%
+  );
+  background-repeat: no-repeat;
+  background-size: 220% 100%;
+  animation: lb-sheen 5s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lb-rise,
+  .lb-podium-sheen {
+    animation: none;
+  }
+}
+
 .grain-overlay {
   position: fixed;
   inset: 0;
