@@ -3,11 +3,16 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MODES, mode } from "@/lib/modes";
 import { catalogue } from "@/lib/store";
+import { fetchLivePulse } from "@/lib/live-pulse";
+import { fetchServerStatus } from "@/lib/status";
 import Icon from "@/components/ui/Icon";
 import CopyIp from "@/components/ui/CopyIp";
 import { Button } from "@/components/ui/button";
+import { PracticeLivePanel } from "@/components/pvp/PracticeLive";
 
 type Params = { params: Promise<{ slug: string }> };
+
+export const revalidate = 15;
 
 export function generateStaticParams() {
   return MODES.map((m) => ({ slug: m.slug }));
@@ -29,6 +34,18 @@ export default async function ModePage({ params }: Params) {
 
   const store = m.store ? catalogue(m.store) : undefined;
   const others = MODES.filter((o) => o.slug !== m.slug);
+  const [pulse, status] =
+    m.slug === "practice"
+      ? await Promise.all([
+          fetchLivePulse().catch(() => null),
+          fetchServerStatus().catch(() => null),
+        ])
+      : [null, null];
+
+  const onlineTrait =
+    status?.state === "online" && status.players
+      ? `${status.players.online} online`
+      : null;
 
   return (
     <>
@@ -86,6 +103,15 @@ export default async function ModePage({ params }: Params) {
 
             <div className="lg:col-span-5 lg:col-start-8">
               <dl className="grid gap-px border border-border bg-border rounded-lg overflow-hidden">
+                {onlineTrait && (
+                  <div className="flex items-center gap-3 bg-card px-5 py-4">
+                    <Icon name="world" size={16} className="shrink-0 text-muted-foreground" />
+                    <dt className="hud text-xs uppercase tracking-widest text-muted-foreground">
+                      Network
+                    </dt>
+                    <dd className="ml-auto text-right text-sm text-foreground">{onlineTrait}</dd>
+                  </div>
+                )}
                 {m.traits.map((t) => (
                   <div key={t.label} className="flex items-center gap-3 bg-card px-5 py-4">
                     <Icon name={t.icon} size={16} className="shrink-0 text-muted-foreground" />
@@ -100,6 +126,12 @@ export default async function ModePage({ params }: Params) {
           </div>
         </div>
       </header>
+
+      {m.slug === "practice" && pulse && (
+        <div className="relative container-base pb-4">
+          <PracticeLivePanel pulse={pulse} />
+        </div>
+      )}
 
       <section className="relative container-base pb-24">
         <div className="grid gap-12 lg:grid-cols-12">
