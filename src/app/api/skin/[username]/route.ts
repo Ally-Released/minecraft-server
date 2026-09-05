@@ -79,7 +79,11 @@ export async function GET(
 
   // 2. If a direct texture URL was supplied (e.g. from Supabase skin_url)
   if (customUrl && customUrl.startsWith("http")) {
-    const customBuf = await fetchTexture(customUrl, 2500);
+    let secureUrl = customUrl;
+    if (secureUrl.startsWith("http://textures.minecraft.net")) {
+      secureUrl = secureUrl.replace("http://", "https://");
+    }
+    const customBuf = await fetchTexture(secureUrl, 2500);
     if (customBuf) {
       cache.set(cacheKey, { buffer: customBuf, contentType: "image/png", expires: now + 3600000 });
       return new NextResponse(customBuf, {
@@ -93,40 +97,11 @@ export async function GET(
     }
   }
 
-  // 3. Parallel race across premium (Mojang/Crafthead/Minotar) and cracked (Ely.by) networks
-  const candidates = [
-    `https://crafthead.net/skin/${encodeURIComponent(username)}`,
-    `https://minotar.net/skin/${encodeURIComponent(username)}`,
-    `https://skin.ely.by/skins/${encodeURIComponent(username)}.png`,
-  ];
-
-  // Try racing the candidate networks concurrently with short timeout
-  const racePromises = candidates.map(url => fetchTexture(url, 1400));
-  const results = await Promise.all(racePromises);
-
-  for (const buf of results) {
-    if (buf) {
-      cache.set(cacheKey, { buffer: buf, contentType: "image/png", expires: now + 86400000 });
-      return new NextResponse(buf, {
-        status: 200,
-        headers: {
-          "Content-Type": "image/png",
-          "Cache-Control": "public, max-age=86400, s-maxage=604800",
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
-    }
-  }
-
-  // 4. Cracked / Offline Fallback:
-  // Instead of default plain Steve/Alex, deterministically assign a unique, badass PvP warrior skin
-  const warriorIndex = hashString(username) % PVP_WARRIOR_TEXTURES.length;
-  const warriorUrl = PVP_WARRIOR_TEXTURES[warriorIndex];
-
-  const warriorBuf = await fetchTexture(warriorUrl, 2000);
-  if (warriorBuf) {
-    cache.set(cacheKey, { buffer: warriorBuf, contentType: "image/png", expires: now + 86400000 });
-    return new NextResponse(warriorBuf, {
+  // 3. Try cracked network (Ely.by) first so cracked players with premium names get their actual cracked skin
+  const elyBuf = await fetchTexture(`https://skin.ely.by/skins/${encodeURIComponent(username)}.png`, 1400);
+  if (elyBuf) {
+    cache.set(cacheKey, { buffer: elyBuf, contentType: "image/png", expires: now + 86400000 });
+    return new NextResponse(elyBuf, {
       status: 200,
       headers: {
         "Content-Type": "image/png",
@@ -136,6 +111,20 @@ export async function GET(
     });
   }
 
-  // Final fallback if all network requests fail
-  return NextResponse.redirect(warriorUrl);
+  // 4. Try premium network (Crafthead) - it will safely return Steve if the user is not found
+  const premiumBuf = await fetchTexture(`https://crafthead.net/skin/${encodeURIComponent(username)}`, 2000);
+  if (premiumBuf) {
+    cache.set(cacheKey, { buffer: premiumBuf, contentType: "image/png", expires: now + 86400000 });
+    return new NextResponse(premiumBuf, {
+      status: 200,
+      headers: {
+        "Content-Type": "image/png",
+        "Cache-Control": "public, max-age=86400, s-maxage=604800",
+        "Access-Control-Allow-Origin": "*",
+      },
+    });
+  }
+
+  // Final fallback to generic Steve if all networks fail
+  return NextResponse.redirect("https://crafthead.net/skin/Steve");
 }

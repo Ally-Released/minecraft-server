@@ -15,6 +15,7 @@ import {
   compareLadder,
   mapPlayerRow,
   modeLabel,
+  playerSharePath,
   withLadderRanks,
   type PlayerRow,
 } from "@/lib/leaderboard";
@@ -40,11 +41,10 @@ export default function LeaderboardPage() {
 
   const supabase = useMemo(() => createClient(), []);
 
-  // /leaderboard?player=Name → redirect to /u/Name (canonical profile URL)
+  // Old ?player= links redirect to canonical /u/username
   useEffect(() => {
-    if (playerParam) {
-      router.replace(`/u/${encodeURIComponent(playerParam)}`);
-    }
+    if (!playerParam) return;
+    router.replace(playerSharePath(playerParam));
   }, [playerParam, router]);
 
   const fetchBoard = useCallback(async () => {
@@ -103,59 +103,77 @@ export default function LeaderboardPage() {
     };
   }, [activeView, fetchBoard, supabase]);
 
-  // On player click → navigate to canonical /u/[username] profile
-  const handleSelectPlayer = (player: PlayerStats | null) => {
-    if (player) {
-      router.push(`/u/${encodeURIComponent(player.username)}`);
-    }
+  const openProfile = (player: PlayerStats) => {
+    router.push(playerSharePath(player.username));
   };
 
   const titleMode = modeLabel(activeView);
 
+  if (playerParam) {
+    return (
+      <div className="relative z-10 mx-auto min-h-[40vh] max-w-[1320px] px-4 py-24 text-lb-mid">
+        Opening profile…
+      </div>
+    );
+  }
+
   return (
     <div className="relative z-10 mx-auto min-h-[70vh] max-w-[1320px] px-4 py-6 pt-24 lg:px-6 lg:pt-28">
       <div className="mx-auto flex w-full max-w-[1180px] flex-col gap-6">
-        <div className="relative overflow-hidden rounded-[12px] border border-lb-line bg-lb-surface">
-          <div
-            aria-hidden
-            className="absolute inset-0"
-            style={{
-              background:
-                "radial-gradient(80% 120% at 85% 40%, rgba(231,193,99,0.12), transparent 55%), linear-gradient(90deg, rgba(7,8,13,0.96) 0%, rgba(7,8,13,0.82) 48%, rgba(7,8,13,0.55) 100%)",
-            }}
-          />
-          <div
-            aria-hidden
-            className="absolute inset-0 opacity-[0.18]"
-            style={{
-              backgroundImage:
-                "linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)",
-              backgroundSize: "28px 28px",
-            }}
-          />
-          <div className="relative flex flex-wrap items-end justify-between gap-5 px-6 py-7 sm:py-8">
-            <div>
-              <div className="lb-eyebrow mb-2 text-lb-brand">Live ranked · 100 LP a division</div>
-              <h1 className="text-[clamp(32px,5vw,50px)] font-extrabold leading-none text-lb-hi">
-                {titleMode}{" "}
-                <span className="text-lb-brand">Ladder</span>
+        <div className="group relative z-20 rounded-[16px] border border-lb-line bg-lb-surface/80 backdrop-blur-xl shadow-2xl transition-all duration-500 hover:border-lb-brand/30">
+          {/* Inner background wrapper with overflow-hidden so gradients stay within rounded bounds without clipping dropdowns */}
+          <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[16px]">
+            {/* Animated gradient background */}
+            <div
+              aria-hidden
+              className="absolute inset-0 opacity-40 transition-opacity duration-500 group-hover:opacity-60"
+              style={{
+                background:
+                  "radial-gradient(80% 120% at 85% 40%, rgba(231,193,99,0.15), transparent 50%), radial-gradient(40% 60% at 15% 90%, rgba(77,163,255,0.08), transparent 50%), linear-gradient(90deg, rgba(7,8,13,0.92) 0%, rgba(7,8,13,0.75) 48%, rgba(7,8,13,0.45) 100%)",
+              }}
+            />
+            {/* Subtle grid pattern overlay */}
+            <div
+              aria-hidden
+              className="absolute inset-0 opacity-[0.15] mix-blend-overlay"
+              style={{
+                backgroundImage:
+                  "linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)",
+                backgroundSize: "32px 32px",
+              }}
+            />
+            {/* Glowing edge light */}
+            <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-lb-brand/20 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+          </div>
+          
+          <div className="relative flex flex-col md:flex-row md:items-end justify-between gap-6 px-6 py-7 sm:px-8 sm:py-9">
+            <div className="flex-1 min-w-0 pr-0 md:pr-4">
+              <div className="lb-eyebrow mb-3 flex items-center gap-2 text-lb-brand">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-lb-brand opacity-75"></span>
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-lb-brand"></span>
+                </span>
+                Live ranked · 100 LP a division · cloud-synced
+              </div>
+              <h1 className="bg-gradient-to-br from-white via-lb-hi to-lb-mid bg-clip-text text-[clamp(32px,5vw,52px)] font-extrabold leading-[1.1] tracking-tight text-transparent drop-shadow-sm">
+                {titleMode} <span className="text-lb-brand drop-shadow-[0_0_12px_rgba(231,193,99,0.3)]">Ladder</span>
               </h1>
-              <p className="mt-1.5 max-w-[42rem] text-[14px] text-lb-body">
+              <p className="mt-3 max-w-[44rem] text-[15px] leading-relaxed text-lb-body/90">
                 {isLoading
                   ? "Syncing live ranked data…"
                   : activeView === "hours"
                     ? `${players.length} players with tracked hours. Time on the server is the other flex.`
                     : players[0]
-                      ? `${players[0].username} holds #1. ${players.length} placed. 5 placement matches, then 100 LP a rank. BO5 to leave LT1 and MT1.`
+                      ? `${players[0].username} holds #1. ${players.length} placed. Click a name to open their /u profile and flex card.`
                       : `Nobody is placed on ${titleMode} yet. Be the first name on this board.`}
               </p>
             </div>
-            <div className="flex flex-wrap items-end gap-4">
-              <PlayerSearch onSelect={(p) => handleSelectPlayer(p)} />
+            <div className="flex flex-wrap items-center md:items-end gap-5 md:shrink-0">
+              <PlayerSearch onSelect={openProfile} />
               <CopyPlayIp />
-              <div className="text-right">
-                <div className="lb-stat text-[22px] leading-none text-lb-hi">{players.length}</div>
-                <div className="lb-eyebrow mt-1.5 text-lb-low">On this board</div>
+              <div className="relative ml-1 flex h-11 flex-row items-center justify-center gap-2 rounded-xl bg-white/5 px-4 border border-white/10 backdrop-blur-md shadow-inner">
+                <span className="lb-stat text-[18px] leading-none text-lb-hi tracking-tight shadow-black drop-shadow-md">{players.length}</span>
+                <span className="lb-eyebrow text-[10px] text-lb-low font-bold uppercase tracking-widest mt-0.5">Placed</span>
               </div>
             </div>
           </div>
@@ -163,10 +181,10 @@ export default function LeaderboardPage() {
 
         <SearchFilterBar activeView={activeView} onViewChange={setActiveView} />
 
-        <TopPodium players={players} onPlayerClick={handleSelectPlayer} view={activeView} />
+        <TopPodium players={players} onPlayerClick={openProfile} view={activeView} />
         <LeaderboardGrid
           players={players}
-          onPlayerClick={handleSelectPlayer}
+          onPlayerClick={openProfile}
           view={activeView}
           totalCount={players.length}
           emptyLabel={

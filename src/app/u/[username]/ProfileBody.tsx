@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+import { ArrowRight, ChevronRight } from "lucide-react";
 import { KitIcon } from "@/components/leaderboard/KitIcon";
 import { RankBadge } from "@/components/leaderboard/RankBadge";
 import {
@@ -12,6 +12,7 @@ import {
   formatRecord,
   isPlaced,
   modeLabel,
+  rankIndex,
   rankTone,
   type LeaderboardView,
 } from "@/lib/leaderboard";
@@ -36,6 +37,20 @@ interface ProfileBodyProps {
   username: string;
 }
 
+function formatHearts(h: number | null): string {
+  if (h == null) return "—";
+  // Display as hearts (support halves)
+  return `${h % 1 === 0 ? h : h.toFixed(1)}♥`;
+}
+
+function formatDuration(ms: number | null): string {
+  if (ms == null || ms <= 0) return "—";
+  const s = Math.round(ms / 1000);
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return m > 0 ? `${m}m ${sec}s` : `${sec}s`;
+}
+
 function matchKindLabel(m: RankedMatchSeries): string {
   if (m.promotion) return "Promotion";
   if (m.placement) return "Placement";
@@ -54,7 +69,7 @@ export function ProfileBody({ kitRows, matches, uuid, username }: ProfileBodyPro
 
   return (
     <div className="mt-4 grid gap-4 lg:grid-cols-[240px_1fr]">
-      {/* ── Kits sidebar ──────────────────────────────────────────── */}
+      {/* Kits sidebar */}
       <aside className="border border-lb-line-strong bg-lb-surface">
         <div className="lb-eyebrow border-b border-white/[0.05] px-3 py-2.5 text-lb-low">
           Kits started
@@ -62,25 +77,19 @@ export function ProfileBody({ kitRows, matches, uuid, username }: ProfileBodyPro
         <div className="flex max-h-[640px] flex-col overflow-y-auto py-1">
           {kitRows.length === 0 ? (
             <p className="px-3 py-4 text-[12px] text-lb-mid">
-              No kits started. Queue ranked on play.clashernetwork.fun.
+              No kits started. Queue ranked to appear here.
             </p>
           ) : (
             <>
-              {/* "All kits" row */}
+              {/* All kits option */}
               <button
                 type="button"
                 onClick={() => setSelectedKit(null)}
                 className={`group flex w-full items-center gap-2.5 border-l-2 px-3 py-2.5 text-left transition-colors ${
-                  !selectedKit
-                    ? "border-lb-brand bg-white/[0.04]"
-                    : "border-transparent hover:bg-white/[0.03]"
+                  !selectedKit ? "border-lb-brand bg-white/[0.04]" : "border-transparent hover:bg-white/[0.03]"
                 }`}
               >
-                <KitIcon
-                  id="overall"
-                  size={18}
-                  className={!selectedKit ? "text-lb-brand" : "text-lb-mid"}
-                />
+                <KitIcon id="overall" size={18} className={!selectedKit ? "text-lb-brand" : "text-lb-mid"} />
                 <span className="min-w-0 flex-1">
                   <span
                     className={`block truncate text-[12px] font-bold uppercase tracking-wide ${
@@ -105,9 +114,7 @@ export function ProfileBody({ kitRows, matches, uuid, username }: ProfileBodyPro
                     aria-current={current ? "true" : undefined}
                     onClick={() => setSelectedKit(current ? null : kit.id)}
                     className={`group flex w-full items-center gap-2.5 border-l-2 px-3 py-2.5 text-left transition-colors ${
-                      current
-                        ? "border-lb-brand bg-white/[0.04]"
-                        : "border-transparent hover:bg-white/[0.03]"
+                      current ? "border-lb-brand bg-white/[0.04]" : "border-transparent hover:bg-white/[0.03]"
                     }`}
                   >
                     <KitIcon
@@ -145,7 +152,7 @@ export function ProfileBody({ kitRows, matches, uuid, username }: ProfileBodyPro
         </div>
       </aside>
 
-      {/* ── Match history ─────────────────────────────────────────── */}
+      {/* Match history */}
       <section className="border border-lb-line-strong bg-lb-surface">
         <div className="flex items-center justify-between border-b border-white/[0.05] px-4 py-3">
           <div>
@@ -172,7 +179,7 @@ export function ProfileBody({ kitRows, matches, uuid, username }: ProfileBodyPro
         </div>
 
         {filteredMatches.length === 0 ? (
-          <div className="flex flex-col items-center justify-center gap-2 px-6 py-12 text-center">
+          <div className="flex flex-col items-center justify-center gap-3 px-6 py-12 text-center">
             <div className="text-[13px] font-bold text-lb-mid">No ranked series synced yet</div>
             <p className="max-w-[320px] text-[12px] leading-relaxed text-lb-low">
               {selectedKit
@@ -183,10 +190,12 @@ export function ProfileBody({ kitRows, matches, uuid, username }: ProfileBodyPro
         ) : (
           <div className="flex flex-col divide-y divide-white/[0.04]">
             {filteredMatches.map((match) => {
-              const pov = perspective(match, uuid);
+              const view = perspective(match, uuid);
               const kitLabel = modeLabel(match.kit as LeaderboardView);
               const kind = matchKindLabel(match);
-              const rankChanged = pov.rankBefore !== pov.rankAfter;
+              const voided = match.voided;
+              const won = view.won === true;
+              const lpDelta = view.lpDelta;
 
               return (
                 <Link
@@ -196,17 +205,15 @@ export function ProfileBody({ kitRows, matches, uuid, username }: ProfileBodyPro
                 >
                   {/* W/L badge */}
                   <span
-                    className={`w-7 shrink-0 py-1 text-center text-[11px] font-extrabold uppercase leading-none ${
-                      match.voided
-                        ? "bg-white/[0.06] text-lb-low"
-                        : pov.won === true
-                          ? "bg-[#24b35e]/10 text-[#24b35e]"
-                          : pov.won === false
-                            ? "bg-[#e05252]/10 text-[#e05252]"
-                            : "bg-white/[0.06] text-lb-low"
+                    className={`shrink-0 w-8 text-center text-[11px] font-extrabold uppercase leading-none py-1 ${
+                      voided
+                        ? "text-lb-low bg-white/[0.06]"
+                        : won
+                          ? "text-[#24b35e] bg-[#24b35e]/10"
+                          : "text-[#e05252] bg-[#e05252]/10"
                     }`}
                   >
-                    {match.voided ? "–" : pov.won === true ? "W" : pov.won === false ? "L" : "?"}
+                    {voided ? "–" : won ? "W" : "L"}
                   </span>
 
                   {/* Kit + kind */}
@@ -220,39 +227,36 @@ export function ProfileBody({ kitRows, matches, uuid, username }: ProfileBodyPro
                   {/* Score */}
                   <div className="flex w-10 shrink-0 items-center justify-center">
                     <span className="font-mono text-[13px] font-bold text-lb-hi">
-                      {pov.myRounds}–{pov.oppRounds}
+                      {view.myRounds}–{view.oppRounds}
                     </span>
                   </div>
 
                   {/* vs opponent */}
                   <div className="min-w-0 flex-1">
-                    <span className="text-[12px] text-lb-low">vs </span>
-                    <span
-                      onClick={(e) => {
-                        e.preventDefault();
-                        window.location.href = `/u/${encodeURIComponent(pov.opponentName)}`;
-                      }}
-                      className="cursor-pointer text-[12px] font-bold text-lb-body transition-colors hover:text-lb-brand"
+                    <span className="text-[12px] text-lb-mid">vs </span>
+                    <Link
+                      href={`/u/${encodeURIComponent(view.opponentName)}`}
+                      onClick={(e) => e.stopPropagation()}
+                      className="text-[12px] font-bold text-lb-body transition-colors hover:text-lb-brand"
                     >
-                      {pov.opponentName}
-                    </span>
-                    {rankChanged && !match.voided && (
+                      {view.opponentName}
+                    </Link>
+                    {view.rankBefore && view.rankAfter && view.rankBefore !== view.rankAfter && (
                       <span className="ml-2 text-[10px] text-lb-low">
-                        {pov.rankBefore} → {pov.rankAfter}
+                        {view.rankBefore} → {view.rankAfter}
                       </span>
                     )}
                   </div>
 
                   {/* LP delta */}
-                  <div className="w-16 shrink-0 text-right">
-                    {!match.voided && pov.lpDelta !== 0 ? (
+                  <div className="w-14 shrink-0 text-right">
+                    {!voided ? (
                       <span
                         className={`font-mono text-[13px] font-bold ${
-                          pov.lpDelta > 0 ? "text-[#24b35e]" : "text-[#e05252]"
+                          lpDelta >= 0 ? "text-[#24b35e]" : "text-[#e05252]"
                         }`}
                       >
-                        {pov.lpDelta > 0 ? "+" : ""}
-                        {pov.lpDelta} LP
+                        {lpDelta >= 0 ? "+" : ""}{lpDelta} LP
                       </span>
                     ) : null}
                   </div>
@@ -262,10 +266,7 @@ export function ProfileBody({ kitRows, matches, uuid, username }: ProfileBodyPro
                     {formatMatchDate(match.createdAt)}
                   </div>
 
-                  <ChevronRight
-                    size={14}
-                    className="shrink-0 text-lb-low transition-colors group-hover:text-lb-mid"
-                  />
+                  <ChevronRight size={14} className="shrink-0 text-lb-low transition-colors group-hover:text-lb-mid" />
                 </Link>
               );
             })}
@@ -275,3 +276,6 @@ export function ProfileBody({ kitRows, matches, uuid, username }: ProfileBodyPro
     </div>
   );
 }
+
+// Exported helper for the match detail page to also use
+export { formatHearts, formatDuration, matchKindLabel };

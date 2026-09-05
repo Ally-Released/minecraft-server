@@ -74,7 +74,7 @@ export function PlayerSearch({
         }}
       >
         <div className="relative flex items-center">
-          <Search className="pointer-events-none absolute left-3 text-lb-low" size={15} aria-hidden />
+          <Search className="pointer-events-none absolute left-3.5 text-lb-low" size={16} aria-hidden />
           <input
             type="search"
             role="combobox"
@@ -94,18 +94,18 @@ export function PlayerSearch({
                 setOpen(false);
               }
             }}
-            placeholder="Search players…"
-            className="h-10 w-52 rounded-full border border-lb-line bg-white/5 pl-9 pr-4 text-[14px] text-lb-hi placeholder:text-lb-low transition-all focus:border-lb-brand/60 focus:bg-white/[0.08] focus:outline-none"
+            placeholder="Search players..."
+            className="h-11 w-[220px] rounded-xl border border-lb-line bg-white/5 pl-10 pr-4 text-[14px] text-lb-hi placeholder:text-lb-low transition-all focus:border-lb-brand/60 focus:bg-white/[0.08] focus:outline-none focus:ring-4 focus:ring-lb-brand/10"
           />
         </div>
       </form>
 
       {open && query.trim().length >= 2 && (
-        <div className="absolute right-0 top-[calc(100%+8px)] z-50 w-72 overflow-hidden rounded-[12px] border border-lb-line-strong bg-lb-surface shadow-[0_24px_50px_-28px_rgba(0,0,0,0.9)]">
+        <div className="absolute left-0 top-[calc(100%+8px)] z-50 w-72 overflow-hidden rounded-[14px] border border-white/10 bg-lb-surface/95 backdrop-blur-2xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)]">
           {hits.length === 0 ? (
-            <p className="px-3 py-3 text-[13px] text-lb-mid">No players match that name.</p>
+            <p className="px-4 py-3.5 text-[13px] text-lb-mid">No players match that name.</p>
           ) : (
-            <ul role="listbox">
+            <ul role="listbox" className="divide-y divide-white/[0.04]">
               {hits.map((player, index) => (
                 <li key={player.uuid}>
                   <button
@@ -114,8 +114,8 @@ export function PlayerSearch({
                     aria-selected={index === active}
                     onMouseEnter={() => setActive(index)}
                     onClick={() => choose(player)}
-                    className={`flex w-full items-center gap-2.5 px-3 py-2.5 text-left transition-colors ${
-                      index === active ? "bg-white/[0.06]" : "hover:bg-white/[0.03]"
+                    className={`flex w-full items-center gap-2.5 px-3.5 py-2.5 text-left transition-colors ${
+                      index === active ? "bg-white/[0.08]" : "hover:bg-white/[0.04]"
                     }`}
                   >
                     <PlayerAvatar username={player.username} skinUrl={player.skin_url} size={28} mode="face" />
