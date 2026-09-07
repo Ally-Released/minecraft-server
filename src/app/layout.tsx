@@ -67,6 +67,15 @@ export const metadata: Metadata = {
     description: SERVER_CONFIG.description,
     images: ["/assets/embed.png"],
   },
+  icons: {
+    icon: [
+      { url: "/assets/logo.png", type: "image/png" },
+    ],
+    shortcut: ["/assets/logo.png"],
+    apple: [
+      { url: "/assets/logo.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
   robots: { index: true, follow: true },
 };
 

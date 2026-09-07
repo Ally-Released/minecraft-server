@@ -9,23 +9,21 @@ export default function Footer() {
       <div className="container-base py-12 md:py-16">
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-10">
           <div className="max-w-xs">
-            <Link href="/" className="flex items-center gap-3">
-              <span className="block h-10 w-10">
-                <span className="block h-full w-full overflow-hidden">
-                  <Image
-                    src={SERVER_CONFIG.logo}
-                    alt=""
-                    width={80}
-                    height={80}
-                    className="h-full w-full object-cover opacity-90 hover:opacity-100 transition-opacity"
-                  />
-                </span>
+            <Link href="/" className="group flex items-center gap-4">
+              <span className="relative flex h-14 w-14 shrink-0 items-center justify-center transition-transform duration-300 group-hover:scale-105">
+                <Image
+                  src={SERVER_CONFIG.logo}
+                  alt={SERVER_CONFIG.name}
+                  width={112}
+                  height={112}
+                  className="h-full w-full object-contain drop-shadow-[0_4px_16px_rgba(0,180,255,0.35)]"
+                />
               </span>
               <span>
-                <span className="display-tight block text-lg leading-none tracking-widest text-foreground">
+                <span className="display-tight block text-xl leading-none tracking-widest text-foreground transition-colors group-hover:text-primary font-bold">
                   {SERVER_CONFIG.name}
                 </span>
-                <span className="hud mt-1 block text-[0.65rem] tracking-widest text-muted-foreground">
+                <span className="hud mt-1.5 block text-[0.68rem] tracking-widest text-muted-foreground">
                   {SERVER_CONFIG.ip}
                 </span>
               </span>

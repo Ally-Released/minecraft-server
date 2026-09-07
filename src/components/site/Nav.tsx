@@ -73,21 +73,19 @@ export default function Nav({ status: initial }: { status: ServerStatus }) {
           className="container-base flex items-center justify-between"
         >
           {/* Identity */}
-          <Link href="/" className="group flex shrink-0 items-center gap-3">
-            <span className="block h-9 w-9 shrink-0 transition-transform duration-300 group-hover:scale-105">
-              <span className="block h-full w-full overflow-hidden">
-                <Image
-                  src={SERVER_CONFIG.logo}
-                  alt=""
-                  width={72}
-                  height={72}
-                  className="h-full w-full object-cover opacity-90 transition-opacity duration-300 group-hover:opacity-100"
-                  priority
-                />
-              </span>
+          <Link href="/" className="group flex shrink-0 items-center gap-3.5">
+            <span className="relative flex h-11 w-11 shrink-0 items-center justify-center transition-transform duration-300 group-hover:scale-105 sm:h-12 sm:w-12">
+              <Image
+                src={SERVER_CONFIG.logo}
+                alt={SERVER_CONFIG.name}
+                width={96}
+                height={96}
+                className="h-full w-full object-contain drop-shadow-[0_2px_10px_rgba(0,180,255,0.4)] transition-all duration-300 group-hover:drop-shadow-[0_4px_16px_rgba(56,189,248,0.7)]"
+                priority
+              />
             </span>
             <span>
-              <span className="display-tight block text-[0.95rem] leading-none tracking-[0.14em] text-foreground transition-colors duration-300 group-hover:text-white xl:text-[1.05rem]">
+              <span className="display-tight block text-[1rem] leading-none tracking-[0.14em] text-foreground transition-colors duration-300 group-hover:text-white sm:text-[1.1rem]">
                 {SERVER_CONFIG.name}
               </span>
             </span>
@@ -183,7 +181,26 @@ export default function Nav({ status: initial }: { status: ServerStatus }) {
           aria-label="Menu"
           className="fixed inset-0 z-40 flex flex-col justify-between overflow-y-auto bg-background/95 px-6 pb-10 pt-24 backdrop-blur-md lg:hidden"
         >
-          <ul className="relative mt-8">
+          <div>
+            <div className="flex items-center gap-3.5 border-b border-border pb-5 mb-2">
+              <Image
+                src={SERVER_CONFIG.logo}
+                alt={SERVER_CONFIG.name}
+                width={64}
+                height={64}
+                className="h-12 w-12 object-contain drop-shadow-[0_2px_10px_rgba(0,180,255,0.4)]"
+              />
+              <div>
+                <span className="display-tight block text-xl font-bold tracking-wider text-foreground">
+                  {SERVER_CONFIG.name}
+                </span>
+                <span className="hud block text-xs tracking-widest text-primary uppercase">
+                  {SERVER_CONFIG.ip}
+                </span>
+              </div>
+            </div>
+
+            <ul className="relative mt-2">
             {LINKS.map((l, i) => (
               <li key={l.href} className="border-b border-border">
                 <Link href={l.href} className="flex items-baseline gap-4 py-4">
@@ -201,6 +218,7 @@ export default function Nav({ status: initial }: { status: ServerStatus }) {
               </li>
             ))}
           </ul>
+        </div>
 
           <div className="relative mt-10 space-y-4">
             <CopyIp />

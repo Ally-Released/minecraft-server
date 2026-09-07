@@ -6,7 +6,7 @@ export const SERVER_CONFIG = {
   /* ── Identity ─────────────────────────────────────────── */
   name: "Clasher Network",
   shortName: "Clasher",
-  logo: "/assets/cn-logo.jpg",
+  logo: "/assets/logo.png",
   url: "https://clashernetwork.fun",
 
   /* ── Connection ───────────────────────────────────────── */

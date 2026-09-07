@@ -23,40 +23,57 @@ export default function Hero({ status: initialStatus }: { status: ServerStatus }
       </div>
 
       <div className="relative z-10 container-base flex min-h-[90svh] flex-col justify-end pb-20 pt-32 lg:pb-28">
-        <div className="max-w-3xl">
-          <div className="mb-7 flex items-center gap-3">
-            <span aria-hidden className="h-px w-9 bg-electric/50" />
-            <span className="eyebrow text-electric tracking-[0.25em]">
-              {SERVER_CONFIG.hero.eyebrow}
-            </span>
-          </div>
-
-          <h1 className="display text-[clamp(2.5rem,7.4vw,6.5rem)] text-white">
-            {SERVER_CONFIG.hero.headline.join(" ")}
-          </h1>
-
-          <p className="prose-lede mt-7 max-w-lg text-[1.05rem] text-ink-2 sm:text-lg">
-            {SERVER_CONFIG.description}
-          </p>
-
-          <div className="mt-10 flex flex-wrap items-center gap-4">
-            <Button asChild size="lg" className="px-8 py-6 text-sm tracking-wider font-semibold rounded-none slab slab-sm bg-white text-abyss hover:bg-white/90">
-              <Link href="/how-to-play">Play Now</Link>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="px-8 py-6 text-sm tracking-wider font-semibold rounded-none">
-              <a href={SERVER_CONFIG.discord} target="_blank" rel="noopener noreferrer">
-                Join Discord
-              </a>
-            </Button>
-          </div>
-
-          <div className="mt-8 max-w-md">
-            <CopyIp />
-            <div className="mt-3 flex items-center gap-2 pl-1">
-              <span className={`h-1.5 w-1.5 rounded-full ${online ? "bg-electric" : "bg-ink-3"}`} />
-              <span className="hud text-[0.65rem] tracking-[0.1em] text-ink-3 uppercase">
-                {online ? `${status.players?.online || 0} Online · Java + Bedrock` : "Offline"}
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-10">
+          <div className="max-w-3xl">
+            <div className="mb-7 flex items-center gap-3">
+              <span aria-hidden className="h-px w-9 bg-electric/50" />
+              <span className="eyebrow text-electric tracking-[0.25em]">
+                {SERVER_CONFIG.hero.eyebrow}
               </span>
+            </div>
+
+            <h1 className="display text-[clamp(2.5rem,7.4vw,6.5rem)] text-white">
+              {SERVER_CONFIG.hero.headline.join(" ")}
+            </h1>
+
+            <p className="prose-lede mt-7 max-w-lg text-[1.05rem] text-ink-2 sm:text-lg">
+              {SERVER_CONFIG.description}
+            </p>
+
+            <div className="mt-10 flex flex-wrap items-center gap-4">
+              <Button asChild size="lg" className="px-8 py-6 text-sm tracking-wider font-semibold rounded-none slab slab-sm bg-white text-abyss hover:bg-white/90">
+                <Link href="/how-to-play">Play Now</Link>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="px-8 py-6 text-sm tracking-wider font-semibold rounded-none">
+                <a href={SERVER_CONFIG.discord} target="_blank" rel="noopener noreferrer">
+                  Join Discord
+                </a>
+              </Button>
+            </div>
+
+            <div className="mt-8 max-w-md">
+              <CopyIp />
+              <div className="mt-3 flex items-center gap-2 pl-1">
+                <span className={`h-1.5 w-1.5 rounded-full ${online ? "bg-electric" : "bg-ink-3"}`} />
+                <span className="hud text-[0.65rem] tracking-[0.1em] text-ink-3 uppercase">
+                  {online ? `${status.players?.online || 0} Online · Java + Bedrock` : "Offline"}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Server 3D Emblem Showcase */}
+          <div className="hidden lg:flex flex-col items-center justify-center shrink-0 mb-4 select-none">
+            <div className="relative group">
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -inset-8 rounded-full bg-cyan-500/20 blur-3xl transition-opacity duration-700 group-hover:bg-cyan-400/35"
+              />
+              <img
+                src={SERVER_CONFIG.logo}
+                alt={SERVER_CONFIG.name}
+                className="relative h-64 w-64 xl:h-76 xl:w-76 object-contain drop-shadow-[0_12px_45px_rgba(0,180,255,0.45)] transition-transform duration-500 group-hover:scale-105"
+              />
             </div>
           </div>
         </div>
