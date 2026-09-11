@@ -180,7 +180,7 @@ const SURVIVAL_RANKS: Rank[] = [
       { icon: "chest", label: "Armor Set", value: "Protection V Netherite (Dragon Heart)" },
       { icon: "sword", label: "Weapons", value: "Netherite Sword & Trident" },
       { icon: "totem", label: "Totems", value: "4× Totem of Undying" },
-      { icon: "apple", label: "God Apples", value: "4× Enchanted Golden Apple" },
+      { icon: "heart", label: "God Apples", value: "4× Enchanted Golden Apple" },
       { icon: "home", label: "Max Homes", value: "6 Homes" },
       { icon: "chest", label: "Player Vaults", value: "2 Vaults (/pv 1-2)" },
       { icon: "block", label: "Claim Blocks", value: "More Claim Blocks" },
