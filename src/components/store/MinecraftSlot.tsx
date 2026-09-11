@@ -34,7 +34,7 @@ export default function MinecraftSlot({
   }
 
   const textureUrl = getItemTextureUrl(item);
-  const isEnchanted = Boolean(item.enchants && item.enchants.length > 0);
+  const isEnchanted = Boolean((item.enchants && item.enchants.length > 0) || item.id === "enchanted_golden_apple");
 
   return (
     <div

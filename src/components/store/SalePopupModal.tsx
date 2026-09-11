@@ -134,7 +134,7 @@ export default function SalePopupModal() {
               <ul className="mt-3.5 space-y-1.5 border-t border-red-500/20 pt-3 text-xs text-ink-2">
                 <li className="flex items-center gap-2">
                   <span className="text-red-400 font-bold">✓</span>
-                  <span>Full Enchanted Diamond Gear & Tools Kit</span>
+                  <span>VIP Diamond Gear & Custom Enchant Tools Kit</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="text-red-400 font-bold">✓</span>

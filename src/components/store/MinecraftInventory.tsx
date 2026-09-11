@@ -4,6 +4,54 @@ import { useState, useEffect, useRef } from "react";
 import { SURVIVAL_KIT_ITEMS, type MinecraftItem, getItemTextureUrl } from "@/lib/minecraft-items";
 import MinecraftSlot from "./MinecraftSlot";
 
+function getItemTitleColor(name: string): string {
+  const n = name.toLowerCase();
+  if (n.startsWith("vip")) return "#55ff55"; // Green from server tooltip
+  if (n.startsWith("elite")) return "#55ffff"; // Aqua / Cyan
+  if (n.startsWith("premium")) return "#fb923c"; // Orange / Fire
+  if (n.startsWith("titan") || n.startsWith("galaxy")) return "#f43f5e"; // Crimson / Rose
+  if (n.startsWith("royal")) return "#ffaa00"; // Gold
+  if (n.startsWith("media")) return "#ec4899"; // Pink
+  if (n.startsWith("god") || n.startsWith("improved")) return "#ff55ff"; // Magenta / Pink
+  return "#ffffff";
+}
+
+function getEnchantStyle(ench: string): { icon?: string; color: string } {
+  const lower = ench.toLowerCase();
+  // Custom server enchants
+  if (lower.includes("dragon heart")) return { icon: "♥", color: "#f43f5e" };
+  if (lower.includes("fire shield") || lower.includes("smelter")) return { icon: "🔥", color: "#fb923c" };
+  if (lower.includes("ice aspect")) return { icon: "❄", color: "#38bdf8" };
+  if (lower.includes("treefeller")) return { icon: "🪓", color: "#4ade80" };
+  if (lower.includes("veinminer") || lower.includes("vein miner")) return { icon: "⛏", color: "#38bdf8" };
+  if (lower.includes("telekinesis")) return { icon: "🔮", color: "#c084fc" };
+  if (lower.includes("riptide")) return { icon: "🌊", color: "#38bdf8" };
+  if (lower.includes("night vision")) return { icon: "👁", color: "#a855f7" };
+  if (lower.includes("restore")) return { icon: "🛡", color: "#38bdf8" };
+  if (lower.includes("cure")) return { icon: "✚", color: "#4ade80" };
+  if (lower.includes("bane of netherspawn")) return { icon: "☠", color: "#f87171" };
+  if (lower.includes("blindness")) return { icon: "🌑", color: "#94a3b8" };
+  if (lower.includes("confusion")) return { icon: "🌀", color: "#c084fc" };
+  if (lower.includes("stopping force")) return { icon: "⛔", color: "#fb7185" };
+  if (lower.includes("lightweight") || lower.includes("feather falling")) return { icon: "🪶", color: "#93c5fd" };
+  if (lower.includes("paralyze")) return { icon: "⚡", color: "#55ffff" };
+  if (lower.includes("glassbreaker") || lower.includes("glass breaker")) return { icon: "🔨", color: "#55ffff" };
+  if (lower.includes("lucky miner")) return { icon: "💎", color: "#55ffff" };
+  if (lower.includes("elemental")) return { color: "#55ffff" };
+
+  if (lower.includes("unbreaking")) return { icon: "★", color: "#ffff55" };
+  if (lower.includes("protection")) return { icon: "🛡", color: "#ff55ff" };
+  if (lower.includes("sharpness")) return { icon: "⚔", color: "#55ff55" };
+  if (lower.includes("mending")) return { icon: "✨", color: "#67e8f9" };
+  if (lower.includes("fortune")) return { icon: "♦", color: "#facc15" };
+  if (lower.includes("silk touch")) return { icon: "✦", color: "#e0e7ff" };
+  if (lower.includes("efficiency")) return { icon: "⚡", color: "#93c5fd" };
+  if (lower.includes("looting")) return { icon: "💰", color: "#fbbf24" };
+  if (lower.includes("sweeping edge")) return { icon: "🌪", color: "#93c5fd" };
+  if (lower.includes("aqua affinity")) return { icon: "💧", color: "#38bdf8" };
+  return { color: "#a5b4fc" };
+}
+
 export default function MinecraftInventory({
   rankId,
   title,
@@ -13,7 +61,7 @@ export default function MinecraftInventory({
 }) {
   const items: MinecraftItem[] = SURVIVAL_KIT_ITEMS[rankId] || [];
   
-  // Dynamically compute exact row count needed (2 rows for VIP, 3 rows for higher tiers)
+  // Dynamically compute exact row count needed (2 rows for VIP/Elite, 3 rows for higher tiers)
   const rowCount = Math.max(1, Math.ceil(items.length / 9));
   const totalSlots = rowCount * 9;
   const displayItems = Array.from({ length: totalSlots }, (_, i) => items[i] || null);
@@ -53,10 +101,10 @@ export default function MinecraftInventory({
 
   // Viewport-clamped tooltip coordinates
   const tooltipX = typeof window !== "undefined"
-    ? Math.min(mousePos.x + 18, window.innerWidth - 230)
+    ? Math.min(mousePos.x + 18, window.innerWidth - 250)
     : mousePos.x + 18;
   const tooltipY = typeof window !== "undefined"
-    ? Math.min(Math.max(mousePos.y - 25, 20), window.innerHeight - 130)
+    ? Math.min(Math.max(mousePos.y - 25, 20), window.innerHeight - 150)
     : mousePos.y - 25;
 
   return (
@@ -139,12 +187,13 @@ export default function MinecraftInventory({
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2.5 flex-wrap">
                 <span
-                  className="font-bold text-sm text-white tracking-wide"
+                  className="font-bold text-sm tracking-wide font-mono"
                   style={{
+                    color: getItemTitleColor(activeInspectItem.name),
                     textShadow: "1px 1px 0px #000000",
                   }}
                 >
-                  {activeInspectItem.name}
+                  {activeInspectItem.name.toUpperCase()}
                 </span>
                 {activeInspectItem.count && activeInspectItem.count > 1 && (
                   <span className="text-[11px] text-emerald-400 font-mono font-bold bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/30">
@@ -155,14 +204,19 @@ export default function MinecraftInventory({
 
               {activeInspectItem.enchants && activeInspectItem.enchants.length > 0 ? (
                 <div className="mt-1 flex flex-wrap gap-1.5">
-                  {activeInspectItem.enchants.map((ench) => (
-                    <span
-                      key={ench}
-                      className="text-xs text-[#a5b4fc] bg-[#1e1b4b]/80 px-2 py-0.5 rounded border border-indigo-500/20 font-mono"
-                    >
-                      {ench}
-                    </span>
-                  ))}
+                  {activeInspectItem.enchants.map((ench) => {
+                    const style = getEnchantStyle(ench);
+                    return (
+                      <span
+                        key={ench}
+                        className="text-xs px-2 py-0.5 rounded border border-white/10 font-mono font-medium flex items-center gap-1 bg-black/40"
+                        style={{ color: style.color }}
+                      >
+                        {style.icon && <span className="text-[11px] leading-none">{style.icon}</span>}
+                        <span>{ench}</span>
+                      </span>
+                    );
+                  })}
                 </div>
               ) : (
                 <p className="text-[11px] text-muted-foreground mt-0.5 font-mono">
@@ -186,32 +240,41 @@ export default function MinecraftInventory({
             border: "2px solid #2b005f",
             boxShadow: "0 0 0 1.5px #5400ba, 0 12px 28px rgba(0,0,0,0.9)",
             borderRadius: "4px",
-            maxWidth: "230px",
+            maxWidth: "250px",
           }}
         >
           <div
-            className="font-bold text-sm leading-tight tracking-wide text-white"
+            className="font-bold text-sm leading-tight tracking-wide font-mono"
             style={{
+              color: getItemTitleColor(hoveredItem.name),
               textShadow: "1px 1px 0px #000000",
             }}
           >
-            {hoveredItem.name}
+            {hoveredItem.name.toUpperCase()}
           </div>
 
           {hoveredItem.enchants && hoveredItem.enchants.length > 0 && (
-            <div className="mt-1.5 space-y-0.5 border-t border-[#5400ba]/40 pt-1.5">
-              {hoveredItem.enchants.map((ench) => (
-                <div
-                  key={ench}
-                  className="text-xs font-medium"
-                  style={{
-                    color: "#a5b4fc",
-                    textShadow: "1px 1px 0px #000000",
-                  }}
-                >
-                  {ench}
-                </div>
-              ))}
+            <div className="mt-1.5 space-y-0.5 border-t border-[#5400ba]/40 pt-1.5 font-mono">
+              {hoveredItem.enchants.map((ench) => {
+                const style = getEnchantStyle(ench);
+                return (
+                  <div
+                    key={ench}
+                    className="text-xs font-semibold flex items-center gap-1.5"
+                    style={{
+                      color: style.color,
+                      textShadow: "1px 1px 0px #000000",
+                    }}
+                  >
+                    {style.icon && (
+                      <span className="text-[11px] leading-none select-none">
+                        {style.icon}
+                      </span>
+                    )}
+                    <span>{ench}</span>
+                  </div>
+                );
+              })}
             </div>
           )}
 
