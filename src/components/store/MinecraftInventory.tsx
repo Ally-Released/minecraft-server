@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { SURVIVAL_KIT_ITEMS, type MinecraftItem, getItemTextureUrl } from "@/lib/minecraft-items";
+import { getKitItems, type MinecraftItem, getItemTextureUrl } from "@/lib/minecraft-items";
 import MinecraftSlot from "./MinecraftSlot";
 
 function getItemTitleColor(name: string): string {
@@ -55,11 +55,13 @@ function getEnchantStyle(ench: string): { icon?: string; color: string } {
 export default function MinecraftInventory({
   rankId,
   title,
+  catalogueId = "survival",
 }: {
   rankId: string;
   title?: string;
+  catalogueId?: string;
 }) {
-  const items: MinecraftItem[] = SURVIVAL_KIT_ITEMS[rankId] || [];
+  const items: MinecraftItem[] = getKitItems(rankId, catalogueId);
   
   // Dynamically compute exact row count needed (2 rows for VIP/Elite, 3 rows for higher tiers)
   const rowCount = Math.max(1, Math.ceil(items.length / 9));

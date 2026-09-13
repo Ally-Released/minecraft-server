@@ -6,7 +6,7 @@ import CopyIp from "@/components/ui/CopyIp";
 
 export const metadata: Metadata = {
   title: "Game modes",
-  description: `Four worlds on ${SERVER_CONFIG.name}: Lifesteal, Survival, Box PvP and PvP Practice. One address, ${SERVER_CONFIG.ip}.`,
+  description: `Three worlds on ${SERVER_CONFIG.name}: Survival, Vanilla and PvP Practice. One address, ${SERVER_CONFIG.ip}.`,
   alternates: { canonical: "/modes" },
 };
 
@@ -20,7 +20,7 @@ export default function ModesPage() {
             <span className="eyebrow text-primary">Choose a world</span>
           </div>
           <h1 className="display text-5xl md:text-6xl text-foreground">
-            Four worlds.
+            Three worlds.
             <span className="block text-primary opacity-90">One address.</span>
           </h1>
           <p className="prose-lede mt-5 max-w-lg text-base">

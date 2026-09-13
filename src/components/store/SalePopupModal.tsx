@@ -149,7 +149,7 @@ export default function SalePopupModal() {
 
             {/* Other ranks note */}
             <div className="mt-4 flex items-center justify-between rounded-lg border border-border/80 bg-background/50 px-3.5 py-2.5 text-xs text-muted-foreground">
-              <span>Higher ranks (Elite, Premium, Galaxy, Royal)</span>
+              <span>Higher ranks (Elite, Premium, Titan, Royal)</span>
               <span className="font-bold text-red-400">Also Discounted</span>
             </div>
 

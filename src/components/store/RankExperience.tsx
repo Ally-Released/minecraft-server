@@ -131,10 +131,11 @@ function Detail({ cat, index }: { cat: Catalogue; index: number }) {
         )}
 
         {/* Minecraft Kit Inventory GUI Preview */}
-        {cat.id === "survival" && (
+        {(cat.id === "survival" || cat.id === "vanilla") && (
           <section className="sm:col-span-2 pt-2 border-t border-border/60">
             <MinecraftInventory
               rankId={rank.id}
+              catalogueId={cat.id}
               title={`${rank.name} Kit Gear & Items`}
             />
           </section>

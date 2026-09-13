@@ -7,7 +7,7 @@ import Icon from "@/components/ui/Icon";
 
 export const metadata: Metadata = {
   title: "Store",
-  description: `Ranks and perks for ${SERVER_CONFIG.name}. Survival and Box PvP progression, delivered in game to your Minecraft account.`,
+  description: `Ranks and perks for ${SERVER_CONFIG.name}. Survival and Vanilla progression, delivered in game to your Minecraft account.`,
   alternates: { canonical: "/store" },
 };
 

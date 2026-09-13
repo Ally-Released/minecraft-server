@@ -44,8 +44,8 @@ export const metadata: Metadata = {
   keywords: [
     "minecraft server",
     "survival smp",
-    "lifesteal",
-    "box pvp",
+    "vanilla",
+    "vanilla survival",
     "pvp practice",
     "java and bedrock",
     SERVER_CONFIG.name,
